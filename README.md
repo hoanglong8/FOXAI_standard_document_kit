@@ -5,7 +5,7 @@
 ## 1. Mục tiêu và Phạm vi áp dụng
 Bộ thư viện này thiết lập các tiêu chuẩn kỹ thuật bắt buộc áp dụng cho mọi dự án AI tại FOXAI theo tư duy **Tuân thủ ngay từ khâu thiết kế (Compliance-by-Design)**. Mục tiêu là đảm bảo mọi sản phẩm phần mềm đều tích hợp sẵn các module an toàn dữ liệu và minh bạch AI, giúp rút ngắn thời gian kiểm thử và sẵn sàng cho công tác thanh tra của cơ quan Nhà nước.
 
----
+<img width="1024" height="1536" alt="5 module cho AI tuân thủ" src="https://github.com/user-attachments/assets/394f3788-a69b-4104-8d95-b44f2bd40881" />
 
 ## 2. Module 1: Mã hóa Dữ liệu (Encryption Module)
 Áp dụng cho mọi hệ thống có xử lý dữ liệu cá nhân của người dùng Việt Nam.
@@ -57,6 +57,8 @@ Mỗi dự án AI cần đóng gói sẵn bộ tài liệu kỹ thuật để ph
 
 ---
 Ngoài 05 module kỹ thuật đã xây dựng, để kinh doanh và sản xuất phần mềm AI tại Việt Nam một cách hợp pháp, FOXAI cần tuân thủ các yêu cầu khắt khe về nhân sự, giấy phép, và bộ hồ sơ pháp lý theo các luật mới nhất (Luật AI 2025, Luật Bảo vệ dữ liệu cá nhân, Luật An ninh mạng).
+
+<img width="1024" height="1536" alt="Yêu cầu về hệ thống AI tuân thủ pháp luật" src="https://github.com/user-attachments/assets/c7550207-2637-4a84-8e66-7c6b83a9aa56" />
 
 ### 1. Yêu cầu về Bằng cấp và Chứng chỉ Nhân sự
 Pháp luật quy định các tiêu chuẩn cụ thể cho đội ngũ vận hành các hệ thống công nghệ cao:
