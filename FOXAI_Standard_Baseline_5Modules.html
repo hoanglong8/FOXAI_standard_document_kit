@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOXAI Standard Baseline – 5 Module Tuân Thủ AI & PDPA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<style>
+  :root {
+    --foxai-primary: #0A1628;
+    --foxai-accent: #00C2FF;
+    --foxai-accent2: #7B2FFF;
+    --foxai-green: #00E5A0;
+    --foxai-orange: #FF6B35;
+    --foxai-red: #FF3B3B;
+    --foxai-yellow: #FFD600;
+    --foxai-card: #0F2040;
+    --foxai-card2: #162B4A;
+    --foxai-border: rgba(0,194,255,0.18);
+    --foxai-text: #E8F4FF;
+    --foxai-muted: #8AAAC8;
+    --radius: 14px;
+    --shadow: 0 4px 32px rgba(0,194,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    background: var(--foxai-primary);
+    color: var(--foxai-text);
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0A1628 0%, #0D1F3C 60%, #121A2E 100%);
+    border-bottom: 1px solid var(--foxai-border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-box {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--foxai-accent), var(--foxai-accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; color: #fff;
+    letter-spacing: -1px;
+  }
+  .logo-text h1 { font-size: 17px; font-weight: 700; color: #fff; }
+  .logo-text p { font-size: 11px; color: var(--foxai-muted); margin-top: 2px; }
+  .header-badges {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+  }
+  .badge {
+    padding: 4px 10px; border-radius: 20px; font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-blue { background: rgba(0,194,255,0.12); color: var(--foxai-accent); border: 1px solid rgba(0,194,255,0.25); }
+  .badge-purple { background: rgba(123,47,255,0.12); color: #B57FFF; border: 1px solid rgba(123,47,255,0.25); }
+  .badge-green { background: rgba(0,229,160,0.1); color: var(--foxai-green); border: 1px solid rgba(0,229,160,0.2); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, #0A1628 0%, #101D38 50%, #0A1628 100%);
+    padding: 60px 32px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,194,255,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(0,194,255,0.15), rgba(123,47,255,0.15));
+    border: 1px solid rgba(0,194,255,0.2);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 12px; font-weight: 600; color: var(--foxai-accent);
+    margin-bottom: 18px; letter-spacing: 0.5px;
+  }
+  .hero h2 {
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff 30%, var(--foxai-accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px; line-height: 1.25;
+  }
+  .hero p {
+    font-size: 15px; color: var(--foxai-muted); max-width: 680px; margin: 0 auto 28px;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 800; color: var(--foxai-accent); }
+  .stat-label { font-size: 11px; color: var(--foxai-muted); margin-top: 2px; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: var(--foxai-card);
+    border-bottom: 1px solid var(--foxai-border);
+    position: sticky; top: 80px; z-index: 90;
+  }
+  .nav-tabs-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 14px 20px;
+    background: none; border: none; border-bottom: 3px solid transparent;
+    color: var(--foxai-muted); font-size: 13px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .tab-btn:hover { color: var(--foxai-text); background: rgba(0,194,255,0.04); }
+  .tab-btn.active { color: var(--foxai-accent); border-bottom-color: var(--foxai-accent); }
+  .tab-icon { font-size: 15px; }
+
+  /* ── MAIN CONTENT ── */
+  main { max-width: 1280px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .module-section { display: none; }
+  .module-section.active { display: block; }
+
+  /* ── MODULE CARD HEADER ── */
+  .module-header {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: linear-gradient(135deg, var(--foxai-card) 0%, var(--foxai-card2) 100%);
+    border: 1px solid var(--foxai-border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .module-header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--module-color, var(--foxai-accent));
+  }
+  .module-num {
+    width: 56px; height: 56px; flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--module-color, var(--foxai-accent)), var(--module-color2, var(--foxai-accent2)));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .module-meta h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .module-meta p { font-size: 14px; color: var(--foxai-muted); max-width: 720px; }
+  .module-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .tag {
+    padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    background: rgba(255,255,255,0.06); color: var(--foxai-muted);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── INFO CARDS ── */
+  .card {
+    background: var(--foxai-card);
+    border: 1px solid var(--foxai-border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--foxai-accent); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .card ul { list-style: none; }
+  .card ul li {
+    padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13.5px; display: flex; align-items: flex-start; gap: 9px;
+    color: var(--foxai-text);
+  }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li::before {
+    content: '▸'; color: var(--foxai-accent); font-size: 11px; margin-top: 3px; flex-shrink: 0;
+  }
+
+  /* ── SPEC TABLE ── */
+  .spec-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .spec-table th {
+    background: rgba(0,194,255,0.08);
+    color: var(--foxai-accent); font-weight: 700;
+    padding: 10px 14px; text-align: left; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .spec-table td {
+    padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--foxai-text);
+    vertical-align: top;
+  }
+  .spec-table tr:hover td { background: rgba(0,194,255,0.03); }
+  .spec-table .key { color: var(--foxai-accent); font-family: 'Courier New', monospace; font-size: 12px; }
+  .spec-table .val { color: #B8D4F0; }
+
+  /* ── COMPLIANCE TABLE ── */
+  .compliance-wrap {
+    background: var(--foxai-card);
+    border: 1px solid var(--foxai-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .compliance-wrap h3 {
+    padding: 14px 20px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #fff;
+    background: linear-gradient(90deg, rgba(0,194,255,0.12), rgba(123,47,255,0.12));
+    border-bottom: 1px solid var(--foxai-border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th {
+    background: rgba(255,255,255,0.04);
+    color: var(--foxai-muted); font-weight: 600;
+    padding: 10px 16px; text-align: left; font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .comp-table td { padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:hover td { background: rgba(0,194,255,0.03); }
+  .feature-cell { color: var(--foxai-text); font-weight: 500; }
+  .law-cell { color: #B57FFF; font-size: 12px; }
+  .status-cell span {
+    padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 600;
+  }
+  .status-required { background: rgba(0,229,160,0.1); color: var(--foxai-green); border: 1px solid rgba(0,229,160,0.2); }
+  .status-critical { background: rgba(255,59,59,0.1); color: var(--foxai-red); border: 1px solid rgba(255,59,59,0.2); }
+  .status-high { background: rgba(255,107,53,0.12); color: var(--foxai-orange); border: 1px solid rgba(255,107,53,0.25); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-wrap {
+    background: var(--foxai-card);
+    border: 1px solid var(--foxai-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .flow-wrap h3 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--foxai-accent); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .mermaid { display: flex; justify-content: center; }
+
+  /* ── RISK LEVELS ── */
+  .risk-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 700px) { .risk-grid { grid-template-columns: 1fr 1fr; } }
+  .risk-card {
+    background: var(--foxai-card); border: 1px solid var(--foxai-border);
+    border-radius: 10px; padding: 16px;
+    border-left: 3px solid var(--risk-color, var(--foxai-accent));
+  }
+  .risk-card .risk-level {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    color: var(--risk-color, var(--foxai-accent)); margin-bottom: 6px;
+  }
+  .risk-card .risk-name { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .risk-card .risk-desc { font-size: 12px; color: var(--foxai-muted); }
+
+  /* ── UI MOCKUP ── */
+  .mockup-wrap {
+    background: #0A1628;
+    border: 1px solid var(--foxai-border);
+    border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 20px;
+  }
+  .mockup-titlebar {
+    background: var(--foxai-card2);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--foxai-border);
+  }
+  .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mockup-title { font-size: 12px; font-weight: 600; color: var(--foxai-muted); margin-left: 6px; }
+  .mockup-body { padding: 20px 24px; }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border-radius: 10px; padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 14px; font-size: 13.5px;
+  }
+  .alert-info { background: rgba(0,194,255,0.07); border: 1px solid rgba(0,194,255,0.18); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert p { color: var(--foxai-text); }
+  .alert strong { color: #fff; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--foxai-muted);
+    margin: 28px 0 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--foxai-border), transparent);
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 9px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--foxai-accent), var(--foxai-accent2));
+  }
+  .timeline-item { position: relative; margin-bottom: 18px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -23px; top: 6px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--foxai-accent); border: 2px solid var(--foxai-primary);
+  }
+  .timeline-item h4 { font-size: 13.5px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+  .timeline-item p { font-size: 12.5px; color: var(--foxai-muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--foxai-border);
+    background: var(--foxai-card);
+    padding: 24px 32px;
+    text-align: center;
+    font-size: 12px; color: var(--foxai-muted);
+  }
+  footer strong { color: var(--foxai-accent); }
+
+  /* ── OVERVIEW ── */
+  .overview-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .overview-grid { grid-template-columns: repeat(2,1fr); } }
+  .overview-card {
+    background: var(--foxai-card); border: 1px solid var(--foxai-border);
+    border-radius: var(--radius); padding: 20px 16px; text-align: center;
+    cursor: pointer; transition: all 0.2s;
+    border-top: 3px solid var(--mod-color, var(--foxai-accent));
+  }
+  .overview-card:hover { background: var(--foxai-card2); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .overview-card .ov-icon { font-size: 28px; margin-bottom: 10px; }
+  .overview-card .ov-num { font-size: 11px; font-weight: 700; color: var(--mod-color); text-transform: uppercase; margin-bottom: 4px; }
+  .overview-card .ov-name { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.3; }
+
+  /* ── PRINCIPLES ── */
+  .principles { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 28px; }
+  @media (max-width: 700px) { .principles { grid-template-columns: 1fr; } }
+  .principle-card {
+    background: var(--foxai-card); border: 1px solid var(--foxai-border);
+    border-radius: 10px; padding: 18px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .principle-icon { font-size: 24px; flex-shrink: 0; }
+  .principle-card h4 { font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .principle-card p { font-size: 12.5px; color: var(--foxai-muted); }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--foxai-primary); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,194,255,0.25); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-box">FX</div>
+      <div class="logo-text">
+        <h1>FOXAI Standard Baseline</h1>
+        <p>AI Compliance &amp; Data Protection Technical Framework</p>
+      </div>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-blue">Nghị định 142/2026/NĐ-CP</span>
+      <span class="badge badge-purple">Nghị định 356/2025/NĐ-CP</span>
+      <span class="badge badge-green">Luật ANM 2025</span>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">🛡️ Compliance-by-Design Framework</div>
+  <h2>5 Module Kiến Trúc Tuân Thủ Chuẩn<br>cho Hệ Thống AI &amp; Dữ Liệu</h2>
+  <p>Bộ thư viện kỹ thuật chuẩn giúp mọi dự án AI của FOXAI sẵn sàng nộp hồ sơ DPIA (Mẫu số 10) cho Bộ Công an, đồng thời tạo lợi thế cạnh tranh trong đấu thầu tại 8 domain khách hàng.</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Module kỹ thuật</div></div>
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Nghị định áp dụng</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Compliance-by-Design</div></div>
+    <div class="stat-item"><div class="stat-num">72h</div><div class="stat-label">Báo cáo sự cố AI</div></div>
+    <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Tháng lưu nhật ký</div></div>
+  </div>
+</div>
+
+<nav class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <button class="tab-btn active" onclick="showTab('overview')" data-tab="overview"><span class="tab-icon">🗺️</span>Tổng quan</button>
+    <button class="tab-btn" onclick="showTab('m1')" data-tab="m1"><span class="tab-icon">🔐</span>M1 · Encryption</button>
+    <button class="tab-btn" onclick="showTab('m2')" data-tab="m2"><span class="tab-icon">📋</span>M2 · Logging</button>
+    <button class="tab-btn" onclick="showTab('m3')" data-tab="m3"><span class="tab-icon">🏷️</span>M3 · AI Labeling</button>
+    <button class="tab-btn" onclick="showTab('m4')" data-tab="m4"><span class="tab-icon">🔑</span>M4 · MFA &amp; IAM</button>
+    <button class="tab-btn" onclick="showTab('m5')" data-tab="m5"><span class="tab-icon">📦</span>M5 · Compliance Kit</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══ TAB: OVERVIEW ═══ -->
+<section id="tab-overview" class="module-section active">
+
+  <div class="overview-grid">
+    <div class="overview-card" style="--mod-color:#00C2FF" onclick="showTab('m1')">
+      <div class="ov-icon">🔐</div>
+      <div class="ov-num">Module 1</div>
+      <div class="ov-name">Mã hóa &amp; Key Management</div>
+    </div>
+    <div class="overview-card" style="--mod-color:#7B2FFF" onclick="showTab('m2')">
+      <div class="ov-icon">📋</div>
+      <div class="ov-num">Module 2</div>
+      <div class="ov-name">Nhật ký Tập trung 12 tháng</div>
+    </div>
+    <div class="overview-card" style="--mod-color:#00E5A0" onclick="showTab('m3')">
+      <div class="ov-icon">🏷️</div>
+      <div class="ov-num">Module 3</div>
+      <div class="ov-name">Gắn nhãn &amp; Watermark AI</div>
+    </div>
+    <div class="overview-card" style="--mod-color:#FF6B35" onclick="showTab('m4')">
+      <div class="ov-icon">🔑</div>
+      <div class="ov-num">Module 4</div>
+      <div class="ov-name">MFA &amp; Phân quyền IAM</div>
+    </div>
+    <div class="overview-card" style="--mod-color:#FFD600" onclick="showTab('m5')">
+      <div class="ov-icon">📦</div>
+      <div class="ov-num">Module 5</div>
+      <div class="ov-name">Bộ hồ sơ Compliance Kit</div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">ℹ️</span>
+    <p><strong>Compliance-by-Design:</strong> Tất cả 5 module được thiết kế tích hợp tính tuân thủ ngay từ kiến trúc, không phải bổ sung sau. Đây là nguyên tắc cốt lõi giúp FOXAI rút ngắn thời gian audit từ tuần xuống còn ngày.</p>
+  </div>
+
+  <div class="section-title">Nguyên tắc kiến trúc cốt lõi</div>
+  <div class="principles">
+    <div class="principle-card">
+      <div class="principle-icon">🛡️</div>
+      <div>
+        <h4>Privacy-by-Default</h4>
+        <p>Mọi cài đặt mặc định ưu tiên bảo vệ dữ liệu: mã hóa bật sẵn, minimal data collection, opt-in thay vì opt-out cho mọi xử lý không thiết yếu.</p>
+      </div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">👁️</div>
+      <div>
+        <h4>Explainability &amp; XAI</h4>
+        <p>Mọi quyết định AI rủi ro cao phải có khả năng giải thích (Explainable AI). Dashboard tích hợp trace log từ Input → Model → Output để phục vụ thanh tra.</p>
+      </div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">🧑‍💼</div>
+      <div>
+        <h4>Human-in-the-Loop</h4>
+        <p>Mọi dashboard quản trị AI rủi ro cao bắt buộc có nút Kill-switch cho phép nhân sự được phân quyền ghi đè hoặc dừng khẩn cấp quyết định AI.</p>
+      </div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">🔍</div>
+      <div>
+        <h4>Anti-tamper Audit Trail</h4>
+        <p>Toàn bộ nhật ký hệ thống được ký số (digital signature) hoặc hash chain để chống sửa xóa — sẵn sàng cung cấp cho Bộ Công an (A05) khi thanh tra.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Bản đồ tuân thủ tổng thể</div>
+  <div class="compliance-wrap">
+    <h3>📊 Module → Luật pháp tương ứng</h3>
+    <table class="comp-table">
+      <thead>
+        <tr><th>Module</th><th>Chức năng chính</th><th>Nghị định 142 (Luật AI)</th><th>Nghị định 356 (PDPA)</th><th>Luật ANM 2025</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="color:#00C2FF;font-weight:700">M1 · Encryption</span></td>
+          <td class="feature-cell">AES-256, TLS 1.3, Key Management, Anonymization</td>
+          <td class="law-cell">Điều 23 – Bảo mật hệ thống AI</td>
+          <td class="law-cell">Điều 26, 27 – Bảo vệ dữ liệu cá nhân kỹ thuật số</td>
+          <td class="law-cell">Điều 12 – Yêu cầu mã hóa hệ thống thông tin</td>
+        </tr>
+        <tr>
+          <td><span style="color:#7B2FFF;font-weight:700">M2 · Logging</span></td>
+          <td class="feature-cell">Nhật ký 12 tháng, Anti-tamper, 4 nhóm log</td>
+          <td class="law-cell">Điều 31 – Lưu trữ nhật ký; Điều 35 – Báo cáo sự cố 72h</td>
+          <td class="law-cell">Điều 38 – Lưu vết truy cập dữ liệu cá nhân</td>
+          <td class="law-cell">Điều 18 – Ghi nhật ký an ninh mạng</td>
+        </tr>
+        <tr>
+          <td><span style="color:#00E5A0;font-weight:700">M3 · Labeling</span></td>
+          <td class="feature-cell">Watermark C2PA/XMP, Nhãn "AI-generated", Deepfake</td>
+          <td class="law-cell">Điều 17 – Gắn nhãn AI; Điều 19 – Khai báo watermark</td>
+          <td class="law-cell">Điều 14 – Minh bạch xử lý dữ liệu tự động</td>
+          <td class="law-cell">–</td>
+        </tr>
+        <tr>
+          <td><span style="color:#FF6B35;font-weight:700">M4 · MFA &amp; IAM</span></td>
+          <td class="feature-cell">MFA bắt buộc, RBAC, Kill-switch, Human-in-loop</td>
+          <td class="law-cell">Điều 28, 29 – Kiểm soát truy cập &amp; Human oversight</td>
+          <td class="law-cell">Điều 32, 33 – Phân quyền &amp; MFA bắt buộc</td>
+          <td class="law-cell">Điều 22 – Xác thực mạnh cho hệ thống CII</td>
+        </tr>
+        <tr>
+          <td><span style="color:#FFD600;font-weight:700">M5 · Compliance Kit</span></td>
+          <td class="feature-cell">DPIA auto-export, System Card, Model Card, DFD</td>
+          <td class="law-cell">Điều 11, 12 – Thẻ hệ thống &amp; Thẻ mô hình AI</td>
+          <td class="law-cell">Mẫu số 10 – Báo cáo DPIA nộp Bộ Công an</td>
+          <td class="law-cell">Điều 8 – Hồ sơ an toàn thông tin hệ thống</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Các rủi ro AI cần kiểm soát theo Luật AI 2025</div>
+  <div class="risk-grid">
+    <div class="risk-card" style="--risk-color:#FF3B3B">
+      <div class="risk-level">🔴 Rủi ro cực cao</div>
+      <div class="risk-name">Prompt Injection Attack</div>
+      <div class="risk-desc">Kẻ xấu chèn lệnh độc hại vào input để điều khiển AI. Xử lý bằng input sanitization + full logging.</div>
+    </div>
+    <div class="risk-card" style="--risk-color:#FF6B35">
+      <div class="risk-level">🟠 Rủi ro cao</div>
+      <div class="risk-name">Data Poisoning (Đầu độc dữ liệu)</div>
+      <div class="risk-desc">Dữ liệu huấn luyện bị nhiễm độc khiến model học sai. Ngăn chặn qua data lineage + hash verification.</div>
+    </div>
+    <div class="risk-card" style="--risk-color:#FF6B35">
+      <div class="risk-level">🟠 Rủi ro cao</div>
+      <div class="risk-name">Model Drift (Trôi mô hình)</div>
+      <div class="risk-desc">Hiệu suất model suy giảm theo thời gian do dữ liệu thực tế thay đổi. Kiểm soát qua monitoring liên tục.</div>
+    </div>
+    <div class="risk-card" style="--risk-color:#FFD600">
+      <div class="risk-level">🟡 Trung bình</div>
+      <div class="risk-name">DPIA chưa được phê duyệt</div>
+      <div class="risk-desc">Triển khai AI xử lý dữ liệu cá nhân mà không nộp báo cáo đánh giá tác động cho Bộ Công an.</div>
+    </div>
+    <div class="risk-card" style="--risk-color:#FFD600">
+      <div class="risk-level">🟡 Trung bình</div>
+      <div class="risk-name">Thiếu gắn nhãn AI</div>
+      <div class="risk-desc">Nội dung do AI tạo ra (deepfake, văn bản, hình ảnh) không có nhãn cảnh báo rõ ràng cho người dùng.</div>
+    </div>
+    <div class="risk-card" style="--risk-color:#00C2FF">
+      <div class="risk-level">🔵 Thấp</div>
+      <div class="risk-name">Log không đủ 12 tháng</div>
+      <div class="risk-desc">Nhật ký lưu dưới 12 tháng hoặc có thể bị chỉnh sửa — vi phạm Điều 31 Nghị định 142.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ TAB: M1 - ENCRYPTION ═══ -->
+<section id="tab-m1" class="module-section">
+  <div class="module-header" style="--module-color:#00C2FF; --module-color2:#0090C2">
+    <div class="module-num" style="--module-color:#00C2FF; --module-color2:#0090C2">🔐</div>
+    <div class="module-meta">
+      <h2>Module 1 · Encryption &amp; Key Management</h2>
+      <p>Cơ chế mã hóa toàn diện: lưu trữ (AES-256-GCM), truyền tải (TLS 1.3), quản lý vòng đời khóa (Key Lifecycle Management) và ẩn danh hóa dữ liệu trước khi huấn luyện AI.</p>
+      <div class="module-tags">
+        <span class="tag">AES-256-GCM</span><span class="tag">TLS 1.3</span><span class="tag">HKDF Key Derivation</span>
+        <span class="tag">Anonymization</span><span class="tag">Pseudonymization</span><span class="tag">Key Rotation 90 ngày</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Luồng xử lý mã hóa</div>
+  <div class="flow-wrap">
+    <h3>🔄 Encryption Data Flow</h3>
+    <div class="mermaid">
+flowchart LR
+    A([Data Input]) --> B{Phân loại dữ liệu}
+    B -->|PII / Nhạy cảm| C[Key Management Service]
+    B -->|Công khai| D[Lưu plaintext]
+    C --> E[Tạo DEK AES-256-GCM]
+    E --> F[Mã hóa data at rest]
+    E --> G[Wrap DEK bằng KEK]
+    G --> H[HSM / Key Vault Isolated]
+    F --> I[(Encrypted Storage)]
+    A -->|API Call| J[TLS 1.3 in-transit]
+    J --> K[Certificate Pinning]
+    K --> L([Secure Channel])
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔒 Mã hóa lưu trữ (At-Rest)</h3>
+      <table class="spec-table">
+        <tr><td class="key">Algorithm</td><td class="val">AES-256-GCM (AEAD mode)</td></tr>
+        <tr><td class="key">Key size</td><td class="val">256-bit DEK per data tenant</td></tr>
+        <tr><td class="key">IV/Nonce</td><td class="val">96-bit random, unique per encryption</td></tr>
+        <tr><td class="key">Key wrapping</td><td class="val">RSA-OAEP-4096 hoặc ECDH-P256</td></tr>
+        <tr><td class="key">HSM integration</td><td class="val">PKCS#11 / KMIP 2.0 compatible</td></tr>
+        <tr><td class="key">Key rotation</td><td class="val">Tự động mỗi 90 ngày</td></tr>
+        <tr><td class="key">Audit trail</td><td class="val">Mọi key access ghi log với timestamp</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>🌐 Mã hóa truyền tải (In-Transit)</h3>
+      <table class="spec-table">
+        <tr><td class="key">Protocol</td><td class="val">TLS 1.3 (TLS 1.2 fallback disabled)</td></tr>
+        <tr><td class="key">Cipher suites</td><td class="val">TLS_AES_256_GCM_SHA384, CHACHA20_POLY1305</td></tr>
+        <tr><td class="key">Certificate</td><td class="val">ECDSA P-256, tự động gia hạn (ACME)</td></tr>
+        <tr><td class="key">Certificate pinning</td><td class="val">HPKP / TrustKit bắt buộc mobile</td></tr>
+        <tr><td class="key">Perfect Forward Secrecy</td><td class="val">✅ ECDHE key exchange</td></tr>
+        <tr><td class="key">HSTS</td><td class="val">max-age=31536000; includeSubDomains</td></tr>
+        <tr><td class="key">mTLS internal</td><td class="val">Service-to-service mutual TLS</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">Anonymization Pipeline cho AI Training</div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>① Phát hiện PII</h3>
+      <ul>
+        <li>NER model: tên, CCCD, SĐT, địa chỉ, email</li>
+        <li>Regex patterns cho structured PII (tài khoản, MST)</li>
+        <li>Confidence score threshold: &gt; 0.85 mới flag</li>
+        <li>Human review cho borderline cases</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>② Kỹ thuật ẩn danh</h3>
+      <ul>
+        <li>Pseudonymization: token reversible cho audit</li>
+        <li>Generalization: "Hà Nội" → "Miền Bắc"</li>
+        <li>Data masking: 0123-456-789 → 0123-xxx-xxx</li>
+        <li>Differential Privacy: noise injection aggregate</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>③ Xác minh sau xử lý</h3>
+      <ul>
+        <li>Re-identification risk score ≤ 0.09 (k-anonymity)</li>
+        <li>Hash fingerprint dataset trước/sau để audit</li>
+        <li>Tự động reject nếu còn PII vượt ngưỡng</li>
+        <li>Certificate anonymization kèm dataset</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="compliance-wrap">
+    <h3>📋 Bảng đối soát tuân thủ – Module 1</h3>
+    <table class="comp-table">
+      <thead><tr><th>Tính năng kỹ thuật</th><th>Điều/Khoản tương ứng</th><th>Mức độ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="feature-cell">Mã hóa AES-256 toàn bộ dữ liệu cá nhân khi lưu trữ</td>
+          <td class="law-cell">Nghị định 356 – Điều 26 (Bảo vệ kỹ thuật DLCN)<br>Nghị định 142 – Điều 23 (Bảo mật hệ thống AI)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">TLS 1.3 cho mọi kênh truyền tải dữ liệu cá nhân</td>
+          <td class="law-cell">Nghị định 356 – Điều 27 (Bảo mật truyền tải)<br>Luật ANM 2025 – Điều 12</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Key Management tách biệt quyền quản trị (Separation of Duties)</td>
+          <td class="law-cell">Nghị định 356 – Điều 32 (Kiểm soát truy cập)<br>ISO 27001 Control A.10</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Ẩn danh hóa dữ liệu cá nhân trước khi dùng cho AI training</td>
+          <td class="law-cell">Nghị định 356 – Điều 10 (Mục đích xử lý DLCN)<br>Nghị định 142 – Điều 15 (Dữ liệu huấn luyện)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Key rotation tự động ≤ 90 ngày với audit log đầy đủ</td>
+          <td class="law-cell">Nghị định 356 – Điều 26 (Biện pháp kỹ thuật cập nhật)<br>NIST SP 800-57</td>
+          <td class="status-cell"><span class="status-high">Khuyến nghị</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ TAB: M2 - LOGGING ═══ -->
+<section id="tab-m2" class="module-section">
+  <div class="module-header" style="--module-color:#7B2FFF; --module-color2:#5A1FCC">
+    <div class="module-num">📋</div>
+    <div class="module-meta">
+      <h2>Module 2 · Centralized Logging &amp; Anti-Tamper</h2>
+      <p>Hệ thống ghi nhật ký tập trung cho 4 nhóm hoạt động, lưu trữ tối thiểu 12 tháng, chống sửa xóa bằng hash chain và digital signature — sẵn sàng cung cấp cho Bộ Công an (A05) khi thanh tra.</p>
+      <div class="module-tags">
+        <span class="tag">ELK Stack / OpenSearch</span><span class="tag">SHA-256 Hash Chain</span>
+        <span class="tag">WORM Storage</span><span class="tag">12 tháng retention</span><span class="tag">72h incident report</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">4 Nhóm nhật ký bắt buộc</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:#7B2FFF">🟣 Nhóm 1 – Access Logs</h3>
+      <ul>
+        <li>UserID, IP, timestamp (UTC+7), user-agent</li>
+        <li>Resource accessed (API endpoint, data entity)</li>
+        <li>HTTP status code, response time (ms)</li>
+        <li>Geo-location và device fingerprint</li>
+        <li>Failed login attempts và lockout events</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#00C2FF">🔵 Nhóm 2 – AI Activity Logs</h3>
+      <ul>
+        <li>Request input (hash + metadata, không lưu PII raw)</li>
+        <li>Model version, model ID, confidence score</li>
+        <li>Output summary + decision category</li>
+        <li>Inference latency và resource usage</li>
+        <li>Model drift score (so sánh với baseline)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#FF3B3B">🔴 Nhóm 3 – Security Alert Logs</h3>
+      <ul>
+        <li>Prompt injection attempts (flagged by guard model)</li>
+        <li>Data poisoning detection events</li>
+        <li>Anomaly detection: unusual access patterns</li>
+        <li>Privilege escalation attempts</li>
+        <li>DLP (Data Loss Prevention) trigger events</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#00E5A0">🟢 Nhóm 4 – Human Intervention Logs</h3>
+      <ul>
+        <li>Override / Reject AI decision (by whom, when, reason)</li>
+        <li>Kill-switch activation events</li>
+        <li>Manual review và final decision</li>
+        <li>Escalation path taken (L1 → L2 → L3)</li>
+        <li>Audit notes và justification text</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Cơ chế chống sửa xóa (Anti-Tamper)</div>
+  <div class="flow-wrap">
+    <h3>🔗 Hash Chain Architecture</h3>
+    <div class="mermaid">
+flowchart LR
+    L1[Log Entry N] --> H1[Hash N]
+    H1 --> C1[Chain Block N]
+    L2[Log Entry N+1] --> H2[Hash N+1]
+    C1 --> C2[Chain Block N+1]
+    H2 --> C2
+    C2 --> S1[Digital Signature Ed25519 per batch]
+    S1 --> W[WORM Storage Object Lock]
+    W --> B[Backup 3-2-1: 3 copies 2 media 1 offsite]
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>⏱️ Retention &amp; Storage Policy</h3>
+      <table class="spec-table">
+        <tr><td class="key">Retention tối thiểu</td><td class="val">12 tháng (Điều 31 NĐ 142)</td></tr>
+        <tr><td class="key">Hot storage</td><td class="val">3 tháng gần nhất (query &lt; 1 giây)</td></tr>
+        <tr><td class="key">Warm storage</td><td class="val">Tháng 4–12 (query &lt; 30 giây)</td></tr>
+        <tr><td class="key">Cold/Archive</td><td class="val">&gt;12 tháng (Glacier / tape)</td></tr>
+        <tr><td class="key">WORM lock</td><td class="val">S3 Object Lock hoặc tương đương</td></tr>
+        <tr><td class="key">Backup rule</td><td class="val">3-2-1: 3 copies, 2 media, 1 offsite</td></tr>
+        <tr><td class="key">Integrity check</td><td class="val">Daily SHA-256 verification job</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>⚡ Incident Response Timeline</h3>
+      <div class="timeline" style="margin-top:10px">
+        <div class="timeline-item"><h4>T+0h · Phát hiện sự cố</h4><p>Alert tự động, incident ticket tạo, on-call nhận notification</p></div>
+        <div class="timeline-item"><h4>T+1h · Đánh giá mức độ (Severity)</h4><p>Phân loại S1/S2/S3, kích hoạt war room nếu S1</p></div>
+        <div class="timeline-item"><h4>T+4h · Khắc phục và containment</h4><p>Cô lập hệ thống bị ảnh hưởng, ngăn lan rộng</p></div>
+        <div class="timeline-item"><h4>T+72h · Báo cáo sơ bộ</h4><p>Nộp báo cáo sơ bộ cho Bộ Công an (Điều 35 NĐ 142)</p></div>
+        <div class="timeline-item"><h4>T+30d · Báo cáo đầy đủ</h4><p>Postmortem + biện pháp khắc phục toàn diện</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compliance-wrap">
+    <h3>📋 Bảng đối soát tuân thủ – Module 2</h3>
+    <table class="comp-table">
+      <thead><tr><th>Tính năng kỹ thuật</th><th>Điều/Khoản tương ứng</th><th>Mức độ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="feature-cell">Ghi nhật ký tập trung tối thiểu 12 tháng</td>
+          <td class="law-cell">Nghị định 142 – Điều 31 (Lưu trữ nhật ký AI 12 tháng)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Log AI Input/Output/Model version đầy đủ</td>
+          <td class="law-cell">Nghị định 142 – Điều 31, 32 (Truy vết quyết định AI)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Anti-tamper bằng hash chain và digital signature</td>
+          <td class="law-cell">Nghị định 142 – Điều 36 (Tính toàn vẹn nhật ký)<br>Luật ANM 2025 – Điều 18</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Log can thiệp của con người (Human Intervention)</td>
+          <td class="law-cell">Nghị định 142 – Điều 29 (Human oversight mechanism)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Báo cáo sự cố sơ bộ trong 72 giờ</td>
+          <td class="law-cell">Nghị định 142 – Điều 35 (Báo cáo sự cố AI)<br>Nghị định 356 – Điều 41 (Thông báo vi phạm DLCN)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Log truy cập dữ liệu cá nhân đầy đủ</td>
+          <td class="law-cell">Nghị định 356 – Điều 38 (Lưu vết xử lý DLCN)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ TAB: M3 - LABELING ═══ -->
+<section id="tab-m3" class="module-section">
+  <div class="module-header" style="--module-color:#00E5A0; --module-color2:#00B880">
+    <div class="module-num">🏷️</div>
+    <div class="module-meta">
+      <h2>Module 3 · AI Labeling &amp; Watermarking</h2>
+      <p>Gắn nhãn kép: Technical Watermark (metadata máy đọc được theo chuẩn C2PA/XMP) và Display Label (hiển thị rõ "Nội dung do AI tạo ra") cho mọi output âm thanh, hình ảnh, video, và văn bản tạo sinh.</p>
+      <div class="module-tags">
+        <span class="tag">C2PA Standard</span><span class="tag">XMP Metadata</span>
+        <span class="tag">Invisible Watermark</span><span class="tag">Deepfake Detection</span><span class="tag">Content Provenance</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Kiến trúc gắn nhãn kép</div>
+  <div class="flow-wrap">
+    <h3>🔄 Dual Labeling Architecture</h3>
+    <div class="mermaid">
+flowchart TD
+    A([AI Generated Content]) --> B[Content Classification]
+    B --> C{Risk Level Dieu 17 ND 142}
+    C -->|High Risk Deepfake| D[Mandatory Labeling]
+    C -->|General AI Content| E[Standard Labeling]
+    D --> F[Technical Watermark C2PA XMP metadata]
+    D --> G[Display Label Canh bao bat buoc]
+    E --> F
+    E --> H[Display Label AI-generated badge]
+    F --> I[(Content Store Provenance Chain)]
+    G --> J[User Interface Modal Banner]
+    H --> J
+    I --> K[Verification API Public lookup]
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:#00E5A0">🔧 Technical Watermark (Machine-readable)</h3>
+      <table class="spec-table">
+        <tr><td class="key">Standard</td><td class="val">C2PA (Coalition for Content Provenance)</td></tr>
+        <tr><td class="key">Metadata format</td><td class="val">XMP (Extensible Metadata Platform) + EXIF</td></tr>
+        <tr><td class="key">Fields bắt buộc</td><td class="val">ai:generated=true, ai:model, ai:timestamp, ai:producer</td></tr>
+        <tr><td class="key">Image watermark</td><td class="val">LSB steganography + DCT frequency domain</td></tr>
+        <tr><td class="key">Audio watermark</td><td class="val">Imperceptible frequency band injection</td></tr>
+        <tr><td class="key">Video watermark</td><td class="val">Per-frame + temporal pattern embedding</td></tr>
+        <tr><td class="key">Text fingerprint</td><td class="val">Unicode variation selectors + n-gram patterns</td></tr>
+        <tr><td class="key">Robustness</td><td class="val">Survive compression, resize, format conversion</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="color:#00C2FF">👁️ Display Label (Human-readable)</h3>
+      <table class="spec-table">
+        <tr><td class="key">Thời điểm hiển thị</td><td class="val">TRƯỚC khi người dùng tiếp cận nội dung</td></tr>
+        <tr><td class="key">Ngôn ngữ</td><td class="val">Tiếng Việt + biểu tượng chuẩn quốc tế</td></tr>
+        <tr><td class="key">Deepfake</td><td class="val">⚠️ Modal cảnh báo toàn màn hình, xác nhận bắt buộc</td></tr>
+        <tr><td class="key">AI text/image</td><td class="val">🤖 Badge "Nội dung do AI tạo ra" góc trên phải</td></tr>
+        <tr><td class="key">AI voice/audio</td><td class="val">🔊 Banner liên tục trong quá trình phát</td></tr>
+        <tr><td class="key">Font size tối thiểu</td><td class="val">14px, contrast ratio ≥ 4.5:1 (WCAG AA)</td></tr>
+        <tr><td class="key">Không thể tắt</td><td class="val">Label không thể bị người dùng ẩn/bypass</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">Mockup giao diện gắn nhãn AI</div>
+  <div class="mockup-wrap">
+    <div class="mockup-titlebar">
+      <div class="mockup-dot" style="background:#FF5F57"></div>
+      <div class="mockup-dot" style="background:#FEBC2E"></div>
+      <div class="mockup-dot" style="background:#28C840"></div>
+      <span class="mockup-title">FOXAI Content Viewer – AI Label Demo (Điều 17 NĐ 142)</span>
+    </div>
+    <div class="mockup-body">
+      <div style="background:#2A0808;border:1px solid rgba(255,59,59,0.4);border-radius:10px;padding:18px 20px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="font-size:22px">⚠️</span>
+          <span style="color:#FF3B3B;font-weight:700;font-size:15px">CẢNH BÁO: NỘI DUNG DEEPFAKE DO AI TẠO RA</span>
+        </div>
+        <p style="color:#FFB0B0;font-size:13px;margin-bottom:12px">Video này chứa hình ảnh/giọng nói được tổng hợp bằng AI. Nội dung không phản ánh thực tế. Vui lòng xác nhận để tiếp tục xem.</p>
+        <div style="display:flex;gap:10px">
+          <button style="background:rgba(255,59,59,0.2);border:1px solid rgba(255,59,59,0.4);color:#FF3B3B;padding:7px 18px;border-radius:7px;font-size:12px;cursor:pointer">✓ Đã hiểu, tiếp tục</button>
+          <button style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#8AAAC8;padding:7px 18px;border-radius:7px;font-size:12px;cursor:pointer">← Quay lại</button>
+        </div>
+      </div>
+      <div style="position:relative;background:#162B4A;border-radius:10px;padding:16px;margin-bottom:16px;overflow:hidden">
+        <div style="position:absolute;top:10px;right:10px;background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);border-radius:6px;padding:4px 10px;font-size:11px;color:#00E5A0;font-weight:600">🤖 Ảnh do AI tạo ra</div>
+        <div style="width:100%;height:80px;background:linear-gradient(135deg,#1A2A4A,#0A1628);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8AAAC8;font-size:13px">[Hình ảnh AI-generated · C2PA watermark embedded]</div>
+        <div style="margin-top:10px;font-size:12px;color:#8AAAC8">
+          <span style="color:#00E5A0">Model:</span> FOXAI-ImageGen-v2.1 &nbsp;|&nbsp;
+          <span style="color:#00E5A0">Tạo lúc:</span> 2026-06-10 09:32 UTC+7 &nbsp;|&nbsp;
+          <span style="color:#00E5A0">Hash:</span> a3f9b2c1...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compliance-wrap">
+    <h3>📋 Bảng đối soát tuân thủ – Module 3</h3>
+    <table class="comp-table">
+      <thead><tr><th>Tính năng kỹ thuật</th><th>Điều/Khoản tương ứng</th><th>Mức độ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="feature-cell">Nhãn "Nội dung do AI tạo ra" trước khi người dùng tiếp cận</td>
+          <td class="law-cell">Nghị định 142 – Điều 17 (Gắn nhãn AI bắt buộc)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Technical watermark C2PA/XMP machine-readable cho media</td>
+          <td class="law-cell">Nghị định 142 – Điều 19 (Khai báo watermark máy đọc được)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Cảnh báo bắt buộc và xác nhận cho Deepfake content</td>
+          <td class="law-cell">Nghị định 142 – Điều 20 (Deepfake: cảnh báo rõ ràng)<br>Nghị định 356 – Điều 14 (Minh bạch xử lý tự động)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Metadata fields: ai:model, ai:timestamp, ai:producer</td>
+          <td class="law-cell">Nghị định 142 – Điều 17, 19 (Nội dung metadata chuẩn)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Label không thể bị người dùng ẩn/tắt (non-dismissable)</td>
+          <td class="law-cell">Nghị định 142 – Điều 17 (Hiển thị liên tục, không bypass)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ TAB: M4 - MFA & IAM ═══ -->
+<section id="tab-m4" class="module-section">
+  <div class="module-header" style="--module-color:#FF6B35; --module-color2:#CC5020">
+    <div class="module-num">🔑</div>
+    <div class="module-meta">
+      <h2>Module 4 · MFA &amp; IAM (Identity &amp; Access Management)</h2>
+      <p>Xác thực đa nhân tố bắt buộc cho tài khoản quản trị, phân quyền RBAC chi tiết, cơ chế Human-in-the-Loop và Kill-switch cho hệ thống AI rủi ro cao theo Điều 28-29 Nghị định 142.</p>
+      <div class="module-tags">
+        <span class="tag">MFA bắt buộc</span><span class="tag">RBAC / ABAC</span><span class="tag">Zero Trust</span>
+        <span class="tag">Kill-switch</span><span class="tag">FIDO2 / WebAuthn</span><span class="tag">PAM</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Kiến trúc Zero Trust IAM</div>
+  <div class="flow-wrap">
+    <h3>🔄 Zero Trust Access Flow</h3>
+    <div class="mermaid">
+flowchart LR
+    U([User Request]) --> IDP[Identity Provider OAuth 2.0 OIDC]
+    IDP --> MFA{MFA Check FIDO2 TOTP}
+    MFA -->|Passed| RBAC[RBAC Engine Role Context]
+    MFA -->|Failed| BLOCK[Block + Alert]
+    RBAC --> POLICY{Policy Engine ABAC Rules}
+    POLICY -->|Allowed| AUDIT[Audit Log Session Record]
+    POLICY -->|Denied| DENY[Deny + Log]
+    AUDIT --> RESOURCE[(Protected Resource)]
+    RESOURCE --> MONITOR[Continuous Monitoring]
+    MONITOR -->|Anomaly| REVOKE[Auto-revoke Session]
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:#FF6B35">🔐 MFA Configuration</h3>
+      <table class="spec-table">
+        <tr><td class="key">Primary auth</td><td class="val">Password + MFA bắt buộc 100%</td></tr>
+        <tr><td class="key">MFA methods</td><td class="val">FIDO2/WebAuthn (ưu tiên), TOTP, SMS (fallback)</td></tr>
+        <tr><td class="key">Admin accounts</td><td class="val">FIDO2 hardware key bắt buộc</td></tr>
+        <tr><td class="key">Data access PII</td><td class="val">TOTP cho mọi truy cập dữ liệu cá nhân</td></tr>
+        <tr><td class="key">Session timeout</td><td class="val">15 phút idle (admin), 2 giờ (user)</td></tr>
+        <tr><td class="key">Concurrent sessions</td><td class="val">Tối đa 2/user, alert nếu bất thường</td></tr>
+        <tr><td class="key">Breach detection</td><td class="val">Tự động khóa sau 5 lần thất bại</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="color:#00C2FF">👥 RBAC Role Matrix</h3>
+      <table class="spec-table">
+        <tr><td class="key">Super Admin</td><td class="val">Full access, FIDO2 only, dual-approval</td></tr>
+        <tr><td class="key">System Admin</td><td class="val">Infra access, no data read, MFA required</td></tr>
+        <tr><td class="key">Data Steward</td><td class="val">Data governance, anonymized views, TOTP</td></tr>
+        <tr><td class="key">AI Operator</td><td class="val">Deploy models, monitor, no raw PII</td></tr>
+        <tr><td class="key">Auditor</td><td class="val">Read-only log access, không thể modify</td></tr>
+        <tr><td class="key">End User</td><td class="val">App features only, no admin access</td></tr>
+        <tr><td class="key">Kill-switch User</td><td class="val">L2/L3: override AI decisions, full log</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">Human-in-the-Loop Dashboard với Kill-switch</div>
+  <div class="mockup-wrap">
+    <div class="mockup-titlebar">
+      <div class="mockup-dot" style="background:#FF5F57"></div>
+      <div class="mockup-dot" style="background:#FEBC2E"></div>
+      <div class="mockup-dot" style="background:#28C840"></div>
+      <span class="mockup-title">FOXAI AI Governance Dashboard – High-Risk AI Control Panel</span>
+    </div>
+    <div class="mockup-body">
+      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:110px;background:#0A1628;border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#00E5A0">247</div>
+          <div style="font-size:11px;color:#8AAAC8;margin-top:2px">AI Decisions Today</div>
+        </div>
+        <div style="flex:1;min-width:110px;background:#0A1628;border:1px solid rgba(255,107,53,0.2);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#FF6B35">3</div>
+          <div style="font-size:11px;color:#8AAAC8;margin-top:2px">Pending Review</div>
+        </div>
+        <div style="flex:1;min-width:110px;background:#0A1628;border:1px solid rgba(0,194,255,0.2);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#00C2FF">98.2%</div>
+          <div style="font-size:11px;color:#8AAAC8;margin-top:2px">Auto-approved</div>
+        </div>
+        <div style="flex:1;min-width:110px;background:#0A1628;border:1px solid rgba(255,59,59,0.2);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#FF3B3B">0</div>
+          <div style="font-size:11px;color:#8AAAC8;margin-top:2px">Kill-switch Active</div>
+        </div>
+      </div>
+      <div style="background:#0F1A2E;border:1px solid rgba(255,107,53,0.3);border-radius:8px;padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="color:#FF6B35;font-weight:700;font-size:13px">⚠️ AI Case #A-2847 – Yêu cầu xem xét của con người</span>
+          <span style="font-size:11px;color:#8AAAC8">5 phút trước</span>
+        </div>
+        <p style="font-size:12px;color:#B8D4F0;margin-bottom:10px">Hệ thống AI phân loại hồ sơ tín dụng với confidence score 68% (dưới ngưỡng 85%). Cần reviewer L2 xác nhận trước khi ra quyết định theo Điều 29 NĐ 142.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button style="background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);color:#00E5A0;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer">✓ Phê duyệt</button>
+          <button style="background:rgba(255,59,59,0.15);border:1px solid rgba(255,59,59,0.3);color:#FF3B3B;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer">✗ Từ chối</button>
+          <button style="background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.2);color:#FFD600;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer">↑ Escalate L3</button>
+          <button style="background:rgba(255,59,59,0.25);border:1px solid rgba(255,59,59,0.6);color:#FF3B3B;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:800;cursor:pointer">🛑 KILL SWITCH</button>
+        </div>
+      </div>
+      <div style="background:#0A1628;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:12px">
+        <p style="font-size:12px;color:#8AAAC8">
+          <span style="color:#FF3B3B">●</span> Kill-switch: Dừng toàn bộ quyết định AI của module này &nbsp;|&nbsp;
+          <span style="color:#FFD600">●</span> Chỉ nhân sự được phân quyền Kill-switch User &nbsp;|&nbsp;
+          <span style="color:#00C2FF">●</span> Mọi hành động ghi vào Nhóm 4 Log tức thì
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="compliance-wrap">
+    <h3>📋 Bảng đối soát tuân thủ – Module 4</h3>
+    <table class="comp-table">
+      <thead><tr><th>Tính năng kỹ thuật</th><th>Điều/Khoản tương ứng</th><th>Mức độ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="feature-cell">MFA bắt buộc cho toàn bộ tài khoản quản trị và truy cập PII</td>
+          <td class="law-cell">Nghị định 356 – Điều 33 (Xác thực mạnh bảo vệ DLCN)<br>Nghị định 142 – Điều 28 (Kiểm soát truy cập AI rủi ro cao)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">RBAC phân quyền chi tiết, tách biệt trách nhiệm</td>
+          <td class="law-cell">Nghị định 356 – Điều 32 (Phân quyền xử lý DLCN nhạy cảm)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Kill-switch dừng khẩn cấp hệ thống AI rủi ro cao</td>
+          <td class="law-cell">Nghị định 142 – Điều 29 (Human oversight: override mechanism)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Human-in-the-loop cho AI decisions có confidence thấp</td>
+          <td class="law-cell">Nghị định 142 – Điều 29, 30 (Giám sát con người AI rủi ro cao)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Giao diện quyền rút lại đồng ý, xóa dữ liệu của người dùng</td>
+          <td class="law-cell">Nghị định 356 – Điều 9 (Quyền của chủ thể dữ liệu)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Giao diện yêu cầu giải thích quyết định AI (Right to Explanation)</td>
+          <td class="law-cell">Nghị định 142 – Điều 33 (Quyền nhận giải thích AI)<br>Nghị định 356 – Điều 11 (Quyền xử lý tự động)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ TAB: M5 - COMPLIANCE KIT ═══ -->
+<section id="tab-m5" class="module-section">
+  <div class="module-header" style="--module-color:#FFD600; --module-color2:#CC9900">
+    <div class="module-num">📦</div>
+    <div class="module-meta">
+      <h2>Module 5 · Compliance Kit &amp; DPIA Auto-Export</h2>
+      <p>Tự động xuất toàn bộ hồ sơ tuân thủ: Sơ đồ luồng dữ liệu (DFD), Thẻ hệ thống (System Card), Thẻ mô hình (Model Card) và Báo cáo DPIA (Mẫu số 10) theo Nghị định 356 — sẵn sàng nộp Bộ Công an.</p>
+      <div class="module-tags">
+        <span class="tag">DPIA Mẫu số 10</span><span class="tag">System Card</span>
+        <span class="tag">Model Card</span><span class="tag">DFD tự động</span><span class="tag">Evidence Bundle</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">4 Loại tài liệu tuân thủ tự động</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="color:#FFD600">📄 DPIA – Báo cáo đánh giá tác động (Mẫu số 10)</h3>
+      <ul>
+        <li>Mô tả hoạt động xử lý dữ liệu cá nhân</li>
+        <li>Đánh giá mức độ cần thiết và tương xứng</li>
+        <li>Nhận diện và đánh giá rủi ro đầy đủ</li>
+        <li>Biện pháp giải quyết rủi ro đã áp dụng</li>
+        <li>Tự động điền từ cấu hình hệ thống (80%)</li>
+        <li>Xuất file .docx hoặc .pdf chuẩn nộp Bộ Công an</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#00C2FF">🃏 System Card – Thẻ hệ thống AI</h3>
+      <ul>
+        <li>Tên, mô tả, phiên bản hệ thống AI</li>
+        <li>Mức độ rủi ro phân loại (High/Medium/Low)</li>
+        <li>Domain áp dụng và đối tượng người dùng</li>
+        <li>Cơ chế giám sát và human oversight hiện có</li>
+        <li>Giới hạn và điều kiện sử dụng an toàn</li>
+        <li>Cơ chế khiếu nại và phương thức khắc phục</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#7B2FFF">🧠 Model Card – Thẻ mô hình AI</h3>
+      <ul>
+        <li>Kiến trúc model, tham số, framework sử dụng</li>
+        <li>Nguồn và đặc điểm dữ liệu huấn luyện</li>
+        <li>Phương pháp anonymization đã áp dụng</li>
+        <li>Hiệu suất, giới hạn và known biases</li>
+        <li>Lịch sử cập nhật và version history</li>
+        <li>Kết quả kiểm tra fairness và XAI metrics</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:#00E5A0">🗺️ DFD – Sơ đồ luồng dữ liệu tự động</h3>
+      <ul>
+        <li>Tự động generate từ service mesh topology</li>
+        <li>Ghi chú loại dữ liệu trên mỗi luồng</li>
+        <li>Highlight điểm xử lý dữ liệu cá nhân</li>
+        <li>Cơ chế bảo vệ tại mỗi điểm (mã hóa, hash)</li>
+        <li>Cross-border data transfer markers</li>
+        <li>Xuất Mermaid / draw.io / Visio format</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Luồng tự động xuất hồ sơ DPIA</div>
+  <div class="flow-wrap">
+    <h3>🔄 DPIA Auto-generation Pipeline</h3>
+    <div class="mermaid">
+flowchart TD
+    A([System Configuration API Services]) --> B[Config Extractor Tu dong doc cau hinh]
+    B --> C{Phan tich du lieu ca nhan?}
+    C -->|Co PII| D[DPIA Required Bat buoc NĐ 356]
+    C -->|Khong PII| E[Standard Docs System Model Card]
+    D --> F[Auto-fill 80 percent DPIA fields]
+    F --> G[Human Review 20 percent xac nhan thu cong]
+    G --> H[Evidence Bundle M1+M2+M3+M4 logs]
+    E --> I[System Card Generator]
+    I --> J[Model Card Generator]
+    H --> K[(Compliance Package)]
+    J --> K
+    K --> L[Export PDF DOCX Nop Bo Cong An A05]
+    K --> M[Dashboard Trang thai tuan thu]
+    </div>
+  </div>
+
+  <div class="section-title">Dashboard trạng thái tuân thủ</div>
+  <div class="mockup-wrap">
+    <div class="mockup-titlebar">
+      <div class="mockup-dot" style="background:#FF5F57"></div>
+      <div class="mockup-dot" style="background:#FEBC2E"></div>
+      <div class="mockup-dot" style="background:#28C840"></div>
+      <span class="mockup-title">FOXAI Compliance Dashboard – Standard Baseline Status</span>
+    </div>
+    <div class="mockup-body">
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#0A2A10;border:1px solid rgba(0,229,160,0.3);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#00E5A0">✅</div><div style="font-size:10px;color:#8AAAC8;margin-top:3px">M1 Encryption</div></div>
+        <div style="background:#0A2A10;border:1px solid rgba(0,229,160,0.3);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#00E5A0">✅</div><div style="font-size:10px;color:#8AAAC8;margin-top:3px">M2 Logging</div></div>
+        <div style="background:#1A1A00;border:1px solid rgba(255,214,0,0.3);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#FFD600">⚠️</div><div style="font-size:10px;color:#8AAAC8;margin-top:3px">M3 Labeling</div></div>
+        <div style="background:#0A2A10;border:1px solid rgba(0,229,160,0.3);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#00E5A0">✅</div><div style="font-size:10px;color:#8AAAC8;margin-top:3px">M4 MFA/IAM</div></div>
+        <div style="background:#1A1A00;border:1px solid rgba(255,214,0,0.3);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:#FFD600">🔄</div><div style="font-size:10px;color:#8AAAC8;margin-top:3px">M5 Comp.Kit</div></div>
+      </div>
+      <div style="background:#0A1628;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:13px;font-weight:700;color:#fff">DPIA – Dự án "AI Credit Scoring v3" · Fintech Domain</span>
+          <span style="background:rgba(255,214,0,0.12);border:1px solid rgba(255,214,0,0.3);border-radius:5px;padding:3px 8px;font-size:11px;color:#FFD600">🔄 Đang xử lý</span>
+        </div>
+        <div style="background:#162B4A;border-radius:6px;height:6px;margin-bottom:6px;overflow:hidden">
+          <div style="background:linear-gradient(90deg,#00C2FF,#7B2FFF);width:68%;height:100%;border-radius:6px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#8AAAC8">
+          <span>68% hoàn thành · Auto-filled: 80% fields từ system config</span>
+          <span>Hạn nộp: 30/06/2026</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button style="background:rgba(0,194,255,0.12);border:1px solid rgba(0,194,255,0.25);color:#00C2FF;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">📥 Export DPIA PDF</button>
+        <button style="background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);color:#00E5A0;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">📊 System Card</button>
+        <button style="background:rgba(123,47,255,0.1);border:1px solid rgba(123,47,255,0.2);color:#B57FFF;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">🧠 Model Card</button>
+        <button style="background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.2);color:#FFD600;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">🗺️ Export DFD</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="compliance-wrap">
+    <h3>📋 Bảng đối soát tuân thủ – Module 5</h3>
+    <table class="comp-table">
+      <thead><tr><th>Tính năng kỹ thuật</th><th>Điều/Khoản tương ứng</th><th>Mức độ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="feature-cell">Tự động xuất Báo cáo DPIA (Mẫu số 10) nộp Bộ Công an</td>
+          <td class="law-cell">Nghị định 356 – Mẫu số 10, Điều 24 (DPIA bắt buộc AI xử lý PII)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">System Card theo định dạng chuẩn (tên, rủi ro, giới hạn, khiếu nại)</td>
+          <td class="law-cell">Nghị định 142 – Điều 11 (Thẻ hệ thống AI bắt buộc)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Model Card ghi rõ thuật toán, dữ liệu huấn luyện, giới hạn</td>
+          <td class="law-cell">Nghị định 142 – Điều 12 (Thẻ mô hình AI bắt buộc)</td>
+          <td class="status-cell"><span class="status-critical">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">DFD tự động từ service topology, annotation điểm xử lý PII</td>
+          <td class="law-cell">Nghị định 356 – Điều 24 (Sơ đồ luồng trong hồ sơ DPIA)</td>
+          <td class="status-cell"><span class="status-required">Bắt buộc</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Evidence bundle: tổng hợp minh chứng từ M1–M4 đính kèm DPIA</td>
+          <td class="law-cell">Nghị định 356 – Điều 24 (Bằng chứng biện pháp kỹ thuật)</td>
+          <td class="status-cell"><span class="status-high">Khuyến nghị mạnh</span></td>
+        </tr>
+        <tr>
+          <td class="feature-cell">Dashboard trạng thái tuân thủ real-time (compliance posture)</td>
+          <td class="law-cell">Luật ANM 2025 – Điều 8 (Báo cáo định kỳ an toàn thông tin)</td>
+          <td class="status-cell"><span class="status-high">Khuyến nghị</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© 2026 <strong>FOXAI Technology JSC</strong> · Standard Baseline Framework v2.0 · Tuân thủ <strong>Nghị định 142/2026/NĐ-CP</strong> (Luật AI) &amp; <strong>Nghị định 356/2025/NĐ-CP</strong> (PDPA) &amp; <strong>Luật ANM 2025</strong></p>
+  <p style="margin-top:6px;font-size:11px">Tài liệu kỹ thuật nội bộ · Delivery Center Director: Nguyễn Hoàng Long · Ngày cập nhật: 10/06/2026</p>
+</footer>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#0A1628',
+      primaryColor: '#0F2040',
+      primaryTextColor: '#E8F4FF',
+      primaryBorderColor: '#00C2FF',
+      lineColor: '#8AAAC8',
+      secondaryColor: '#162B4A',
+      tertiaryColor: '#0A1628',
+      nodeBorder: '#00C2FF',
+      mainBkg: '#0F2040'
+    },
+    flowchart: { htmlLabels: false, curve: 'basis' }
+  });
+</script>
+</body>
+</html>

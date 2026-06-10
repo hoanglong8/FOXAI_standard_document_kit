@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOXAI Standard Document Kit</title>
+<style>
+:root {
+  --navy: #060E1F;
+  --card: #0C1A30;
+  --blue: #0EA5E9;
+  --purple: #8B5CF6;
+  --text: #E2E8F0;
+  --muted: #94A3B8;
+  --border: rgba(14,165,233,0.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+.logo { width: 56px; height: 56px; background: linear-gradient(135deg, #0EA5E9, #8B5CF6); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; letter-spacing: -1px; margin: 0 auto 20px; }
+h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 8px; }
+p.sub { color: var(--muted); text-align: center; margin-bottom: 48px; font-size: 1rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 960px; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; gap: 10px; }
+.card:hover { border-color: var(--blue); transform: translateY(-3px); }
+.card-icon { font-size: 2rem; }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--blue); }
+.card-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+footer { margin-top: 60px; color: var(--muted); font-size: 0.8rem; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="logo">FOX</div>
+  <h1>FOXAI Standard Document Kit</h1>
+  <p class="sub">Bộ tài liệu tiêu chuẩn hệ thống AI tuân thủ pháp luật</p>
+
+  <div class="grid">
+    <a href="FOXAI_BanLanhDao_StandardBaseline.html" class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Standard Baseline – Ban Lãnh Đạo</div>
+      <div class="card-desc">Tài liệu trình bày tổng quan hệ thống AI cho Ban Lãnh Đạo, bao gồm chiến lược, kiến trúc và lộ trình triển khai.</div>
+    </a>
+    <a href="FOXAI_StandardBaseline_AdminUI.html" class="card">
+      <div class="card-icon">🖥️</div>
+      <div class="card-title">Standard Baseline – Admin UI</div>
+      <div class="card-desc">Giao diện quản trị hệ thống AI, cấu hình module, phân quyền người dùng và giám sát hoạt động.</div>
+    </a>
+    <a href="FOXAI_Standard_Baseline_5Modules.html" class="card">
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">Standard Baseline – 5 Modules</div>
+      <div class="card-desc">Chi tiết 5 module cốt lõi của hệ thống AI tuân thủ pháp luật: kiến trúc, tích hợp và vận hành.</div>
+    </a>
+  </div>
+
+  <footer>© 2025 FOXAI &nbsp;·&nbsp; hoanglong8.github.io/FOXAI_standard_document_kit</footer>
+</body>
+</html>

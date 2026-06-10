@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOXAI Standard Baseline – Admin Dashboard</title>
+<style>
+:root {
+  --sidebar-bg: #0D1B35;
+  --sidebar-hover: rgba(255,255,255,0.06);
+  --sidebar-active: rgba(124,75,255,0.18);
+  --sidebar-text: #A8B5CC;
+  --sidebar-label: #5A6A82;
+  --primary: #7C4BFF;
+  --primary-light: #9D71FF;
+  --blue: #2B7FFF;
+  --teal: #00C2A8;
+  --green: #1DBF73;
+  --orange: #FF8C00;
+  --red: #E53E3E;
+  --yellow: #F6AD55;
+  --bg: #F0F2F7;
+  --card: #FFFFFF;
+  --border: #E2E8F0;
+  --text: #1A2340;
+  --muted: #64748B;
+  --tag-bg: #F1EDFF;
+  --tag-c: #7C4BFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+/* ─── SIDEBAR ─── */
+.sidebar{width:236px;flex-shrink:0;background:var(--sidebar-bg);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1)}
+.sb-brand{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#7C4BFF,#2B7FFF);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;letter-spacing:-0.5px}
+.sb-logo-name{font-size:17px;font-weight:800;color:#fff;letter-spacing:0.5px}
+.sb-tagline{font-size:9.5px;color:var(--sidebar-label);text-transform:uppercase;letter-spacing:1px;margin-top:2px;padding-left:46px}
+.sb-section{padding:14px 12px 4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--sidebar-label)}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 14px;border-radius:7px;margin:1px 6px;cursor:pointer;color:var(--sidebar-text);font-size:13px;font-weight:500;transition:all .15s;white-space:nowrap;overflow:hidden}
+.sb-item:hover{background:var(--sidebar-hover);color:#fff}
+.sb-item.active{background:var(--sidebar-active);color:#C4AEFF;font-weight:600}
+.sb-item .sb-ic{font-size:15px;flex-shrink:0;opacity:.8}
+.sb-item.active .sb-ic{opacity:1}
+.sb-badge{margin-left:auto;background:rgba(255,255,255,0.1);color:#A8B5CC;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;flex-shrink:0}
+.sb-badge.red{background:rgba(229,62,62,0.25);color:#FC8181}
+.sb-user{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:9px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7C4BFF,#2B7FFF);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-uname{font-size:12.5px;font-weight:600;color:#fff}
+.sb-urole{font-size:10.5px;color:var(--sidebar-label)}
+/* ─── MAIN ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.topbar-left .crumb{color:var(--muted)}
+.topbar-left .crumb-cur{color:var(--text);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.tb-date{font-size:12px;color:var(--muted)}
+.tb-notif{width:32px;height:32px;border-radius:7px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;position:relative}
+.tb-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid #fff}
+.tb-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(29,191,115,0.08);border:1px solid rgba(29,191,115,0.2);font-size:11.5px;font-weight:600;color:#1DBF73}
+.tb-chip::before{content:'';width:6px;height:6px;border-radius:50%;background:#1DBF73;display:inline-block}
+.content{flex:1;overflow-y:auto;padding:24px 28px}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+/* ─── PAGE ─── */
+.page{display:none}
+.page.active{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+/* ─── TYPOGRAPHY ─── */
+.page-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ─── STAT CARDS ─── */
+.stats-row{display:grid;gap:14px;margin-bottom:22px}
+.stats-4{grid-template-columns:repeat(4,1fr)}
+.stats-3{grid-template-columns:repeat(3,1fr)}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px}
+.stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.stat-val{font-size:24px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--muted);margin-top:3px}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:4px}
+.stat-sub.up{color:#1DBF73}
+.stat-sub.down{color:var(--red)}
+/* ─── CARDS ─── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px}
+.card-action{font-size:12px;color:var(--primary);font-weight:600;cursor:pointer}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+/* ─── TABLE ─── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:9px 12px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);background:#F8FAFC;border-bottom:1px solid var(--border)}
+tbody td{padding:11px 12px;border-bottom:1px solid #F1F5F9;color:var(--text);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#FAFBFF}
+/* ─── BADGES ─── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;font-size:11.5px;font-weight:600}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.badge-green{background:rgba(29,191,115,0.1);color:#1DBF73}.badge-green::before{background:#1DBF73}
+.badge-red{background:rgba(229,62,62,0.1);color:var(--red)}.badge-red::before{background:var(--red)}
+.badge-yellow{background:rgba(246,173,85,0.15);color:#C07800}.badge-yellow::before{background:#F6AD55}
+.badge-blue{background:rgba(43,127,255,0.1);color:var(--blue)}.badge-blue::before{background:var(--blue)}
+.badge-purple{background:var(--tag-bg);color:var(--primary)}.badge-purple::before{background:var(--primary)}
+.badge-gray{background:#F1F5F9;color:var(--muted)}.badge-gray::before{background:#94A3B8}
+/* ─── PROGRESS BAR ─── */
+.prog-bar{height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-top:5px}
+.prog-fill{height:100%;border-radius:3px}
+/* ─── BUTTONS ─── */
+.btn{padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{background:var(--bg)}
+.btn-red{background:rgba(229,62,62,0.1);color:var(--red);border:1px solid rgba(229,62,62,0.2)}.btn-red:hover{background:rgba(229,62,62,0.18)}
+.btn-green{background:rgba(29,191,115,0.1);color:#1DBF73;border:1px solid rgba(29,191,115,0.2)}
+.btn-sm{padding:5px 10px;font-size:11.5px}
+/* ─── TIMELINE LOG ─── */
+.log-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid #F1F5F9;font-size:12.5px}
+.log-row:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.log-time{color:var(--muted);font-size:11.5px;white-space:nowrap;min-width:70px}
+/* ─── KILL SWITCH ─── */
+.kill-switch{background:linear-gradient(135deg,rgba(229,62,62,0.05),rgba(229,62,62,0.02));border:1.5px solid rgba(229,62,62,0.2);border-radius:12px;padding:20px 22px}
+.ks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ks-title{font-size:14px;font-weight:700;color:var(--red);display:flex;align-items:center;gap:8px}
+.ks-toggle{width:50px;height:26px;border-radius:13px;background:#E2E8F0;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.ks-toggle.on{background:var(--red)}
+.ks-toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ks-toggle.on::after{left:27px}
+/* ─── MODULE STATUS MINI ─── */
+.mod-status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.mod-status-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-top:3px solid var(--mod-color,#7C4BFF)}
+.mod-status-card h4{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:6px}
+.mod-score{font-size:22px;font-weight:900;color:var(--mod-color,#7C4BFF);line-height:1}
+.mod-label{font-size:11px;color:var(--muted);margin-top:2px}
+/* ─── FORM ELEMENTS ─── */
+.form-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.form-label{font-size:12.5px;font-weight:600;color:var(--text);min-width:160px}
+.form-value{font-size:13px;color:var(--muted)}
+select,input[type=text]{padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12.5px;color:var(--text);background:#fff;outline:none}
+select:focus,input:focus{border-color:var(--primary)}
+/* ─── CHIP TAGS ─── */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:var(--tag-bg);color:var(--tag-c);margin:2px}
+/* ─── COMPLIANCE SCORE CIRCLE ─── */
+.score-circle{width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--green) 0% 78%,#E2E8F0 78% 100%);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.score-inner{width:60px;height:60px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--green)}
+/* ─── ALERTS ─── */
+.alert{padding:12px 16px;border-radius:8px;display:flex;gap:10px;margin-bottom:12px;font-size:13px}
+.alert-red{background:rgba(229,62,62,0.07);border:1px solid rgba(229,62,62,0.18);color:#C53030}
+.alert-yellow{background:rgba(246,173,85,0.08);border:1px solid rgba(246,173,85,0.25);color:#92600A}
+.alert-green{background:rgba(29,191,115,0.07);border:1px solid rgba(29,191,115,0.2);color:#1A7A4D}
+.alert-blue{background:rgba(43,127,255,0.07);border:1px solid rgba(43,127,255,0.18);color:#1E56B0}
+.alert-icon{flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">FX</div>
+      <span class="sb-logo-name">FOXAI</span>
+    </div>
+    <div class="sb-tagline">Your Trusted Partner · Native</div>
+  </div>
+
+  <div class="sb-section">Tổng quan</div>
+  <div class="sb-item active" onclick="nav('dashboard',this)"><span class="sb-ic">📊</span>Dashboard<span class="sb-badge">5</span></div>
+
+  <div class="sb-section">Standard Baseline</div>
+  <div class="sb-item" onclick="nav('m1',this)"><span class="sb-ic">🔐</span>M1 · Mã hóa & Khóa</div>
+  <div class="sb-item" onclick="nav('m2',this)"><span class="sb-ic">📋</span>M2 · Nhật ký AI<span class="sb-badge red">3</span></div>
+  <div class="sb-item" onclick="nav('m3',this)"><span class="sb-ic">🏷️</span>M3 · Gắn nhãn AI</div>
+  <div class="sb-item" onclick="nav('m4',this)"><span class="sb-ic">🔑</span>M4 · MFA & Phân quyền</div>
+  <div class="sb-item" onclick="nav('m5',this)"><span class="sb-ic">📦</span>M5 · Compliance Kit</div>
+
+  <div class="sb-section">Hệ thống</div>
+  <div class="sb-item" onclick="nav('dashboard',this)"><span class="sb-ic">⚙️</span>Cấu hình hệ thống</div>
+  <div class="sb-item" onclick="nav('dashboard',this)"><span class="sb-ic">🔔</span>Cảnh báo & Alert</div>
+
+  <div class="sb-user">
+    <div class="sb-avatar">NL</div>
+    <div>
+      <div class="sb-uname">Nguyễn Hoàng Long</div>
+      <div class="sb-urole">SUPER_ADMIN</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="crumb">FOXAI Standard Baseline</span>
+      <span class="crumb"> / </span>
+      <span id="crumb-cur" class="crumb-cur">Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-date">📅 Thứ Tư, 10/06/2026</div>
+      <div class="tb-notif">🔔<div class="tb-notif-dot"></div></div>
+      <div class="tb-chip">AI đang hoạt động</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════ DASHBOARD ════════════ -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-title">Dashboard Tổng Quan</div>
+      <div class="page-sub">Trạng thái tuân thủ tất cả 5 module · Cập nhật lần cuối 10:42 SA</div>
+
+      <div class="mod-status-grid">
+        <div class="mod-status-card" style="--mod-color:#2B7FFF">
+          <h4>🔐 M1 · Mã hóa</h4>
+          <div class="mod-score">98%</div>
+          <div class="mod-label">Coverage</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:98%;background:#2B7FFF"></div></div>
+        </div>
+        <div class="mod-status-card" style="--mod-color:#7C4BFF">
+          <h4>📋 M2 · Logging</h4>
+          <div class="mod-score">100%</div>
+          <div class="mod-label">Uptime 12 tháng</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:100%;background:#7C4BFF"></div></div>
+        </div>
+        <div class="mod-status-card" style="--mod-color:#1DBF73">
+          <h4>🏷️ M3 · Nhãn AI</h4>
+          <div class="mod-score">94%</div>
+          <div class="mod-label">Labeled content</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:94%;background:#1DBF73"></div></div>
+        </div>
+        <div class="mod-status-card" style="--mod-color:#FF8C00">
+          <h4>🔑 M4 · MFA/IAM</h4>
+          <div class="mod-score">87%</div>
+          <div class="mod-label">MFA adoption</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:87%;background:#FF8C00"></div></div>
+        </div>
+        <div class="mod-status-card" style="--mod-color:#00C2A8">
+          <h4>📦 M5 · Compliance</h4>
+          <div class="mod-score">78%</div>
+          <div class="mod-label">DPIA hoàn thành</div>
+          <div class="prog-bar" style="margin-top:8px"><div class="prog-fill" style="width:78%;background:#00C2A8"></div></div>
+        </div>
+      </div>
+
+      <div class="stats-row stats-4">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">🔐</div>
+          <div>
+            <div class="stat-val">47</div>
+            <div class="stat-label">Khóa mã hóa đang hoạt động</div>
+            <div class="stat-sub up">↑ 3 khóa mới hôm nay</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,75,255,0.1)">📋</div>
+          <div>
+            <div class="stat-val">284K</div>
+            <div class="stat-label">Log entries (24h qua)</div>
+            <div class="stat-sub">Tổng 12 tháng: 18.4M</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(229,62,62,0.1)">🚨</div>
+          <div>
+            <div class="stat-val" style="color:var(--red)">3</div>
+            <div class="stat-label">Cảnh báo bảo mật chưa xử lý</div>
+            <div class="stat-sub down">↑ 1 mới trong 1h</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(29,191,115,0.1)">✅</div>
+          <div>
+            <div class="stat-val">7/9</div>
+            <div class="stat-label">Dự án đạt Compliance</div>
+            <div class="stat-sub">2 dự án cần cập nhật DPIA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🚨 Cảnh báo bảo mật gần đây</div>
+            <div class="card-action">Xem tất cả →</div>
+          </div>
+          <div class="log-row">
+            <div class="log-dot" style="background:var(--red)"></div>
+            <div class="log-time">09:41 SA</div>
+            <div><strong>Prompt Injection</strong> attempt phát hiện tại AI Chatbot KH ngân hàng VCB. User ID: u_83921. <span class="badge badge-red">Cần xử lý</span></div>
+          </div>
+          <div class="log-row">
+            <div class="log-dot" style="background:var(--yellow)"></div>
+            <div class="log-time">08:15 SA</div>
+            <div>Login failed ×5 — tài khoản <strong>admin_deploy_02</strong> bị khóa tự động. <span class="badge badge-yellow">Đã khóa</span></div>
+          </div>
+          <div class="log-row">
+            <div class="log-dot" style="background:var(--yellow)"></div>
+            <div class="log-time">07:02 SA</div>
+            <div>Model Drift alert: AI tín dụng BIDV — precision giảm 4.3% vs baseline. <span class="badge badge-yellow">Đang theo dõi</span></div>
+          </div>
+          <div class="log-row">
+            <div class="log-dot" style="background:var(--green)"></div>
+            <div class="log-time">T2, 09/06</div>
+            <div>Key rotation thành công: 12 khóa AES-256. Không gián đoạn dịch vụ. <span class="badge badge-green">Hoàn thành</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📦 Trạng thái DPIA các dự án</div>
+            <div class="card-action">Tạo DPIA mới →</div>
+          </div>
+          <table>
+            <thead><tr><th>Dự án</th><th>Khách hàng</th><th>Trạng thái</th><th>Deadline</th></tr></thead>
+            <tbody>
+              <tr><td><strong>KMS Gov v2</strong></td><td>UBND TP.HCM</td><td><span class="badge badge-green">Đã nộp</span></td><td style="color:var(--muted);font-size:12px">15/06</td></tr>
+              <tr><td><strong>AI Credit BNK</strong></td><td>BIDV</td><td><span class="badge badge-green">Đã phê duyệt</span></td><td style="color:var(--muted);font-size:12px">30/05</td></tr>
+              <tr><td><strong>IOC Hanoi</strong></td><td>Sở TT&TT HN</td><td><span class="badge badge-yellow">Đang soạn</span></td><td style="color:var(--orange);font-size:12px;font-weight:700">20/06 ⚠️</td></tr>
+              <tr><td><strong>CDP Retail</strong></td><td>Winmart</td><td><span class="badge badge-red">Chưa có</span></td><td style="color:var(--red);font-size:12px;font-weight:700">Quá hạn!</td></tr>
+              <tr><td><strong>Chatbot Health</strong></td><td>Bv Bạch Mai</td><td><span class="badge badge-blue">Review</span></td><td style="color:var(--muted);font-size:12px">28/06</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ MODULE 1 ════════════ -->
+    <div id="page-m1" class="page">
+      <div class="page-title">🔐 Module 1 · Mã hóa & Quản lý Khóa</div>
+      <div class="page-sub">AES-256-GCM · TLS 1.3 · PKCS#11 Key Vault · Key rotation 90 ngày</div>
+
+      <div class="stats-row stats-4">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">🔑</div>
+          <div><div class="stat-val">47</div><div class="stat-label">Khóa đang hoạt động</div><div class="stat-sub up">↑ 3 mới hôm nay</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(29,191,115,0.1)">🔄</div>
+          <div><div class="stat-val">12</div><div class="stat-label">Khóa xoay vòng tuần này</div><div class="stat-sub">Tự động · Không gián đoạn</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,75,255,0.1)">🗃️</div>
+          <div><div class="stat-val">98%</div><div class="stat-label">Coverage mã hóa at-rest</div><div class="stat-sub">2% chờ migrate</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,140,0,0.1)">⏰</div>
+          <div><div class="stat-val" style="color:var(--orange)">4</div><div class="stat-label">Khóa sắp hết hạn (≤ 7 ngày)</div><div class="stat-sub down">Cần xoay vòng</div></div>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow"><span class="alert-icon">⚠️</span><div><strong>Cảnh báo:</strong> 4 khóa mã hóa sắp hết hạn trong 7 ngày tới. Hệ thống sẽ tự động xoay vòng lúc 2:00 SA. Kiểm tra trước khi tiến hành nếu cần.</div></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🗂️ Danh sách Khóa mã hóa</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm">⬇️ Xuất audit log</button>
+            <button class="btn btn-primary btn-sm">+ Tạo khóa mới</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Key ID</th><th>Tên khóa</th><th>Thuật toán</th><th>Mục đích</th><th>Ngày tạo</th><th>Ngày hết hạn</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family:monospace;font-size:11.5px;color:var(--muted)">key-001-ae</td>
+                <td><strong>DB Master Key</strong><br><span style="font-size:11px;color:var(--muted)">KMS Gov v2 · UBND TP.HCM</span></td>
+                <td><span class="tag">AES-256-GCM</span></td>
+                <td><span class="badge badge-purple">At-rest</span></td>
+                <td style="font-size:12px;color:var(--muted)">01/03/2026</td>
+                <td style="font-size:12px;color:var(--muted)">31/05/2026</td>
+                <td><span class="badge badge-green">Hoạt động</span></td>
+                <td><button class="btn btn-outline btn-sm">Xoay vòng</button></td>
+              </tr>
+              <tr>
+                <td style="font-family:monospace;font-size:11.5px;color:var(--muted)">key-002-tl</td>
+                <td><strong>API Gateway TLS</strong><br><span style="font-size:11px;color:var(--muted)">Tất cả dự án · In-transit</span></td>
+                <td><span class="tag">TLS 1.3 / RSA-4096</span></td>
+                <td><span class="badge badge-blue">In-transit</span></td>
+                <td style="font-size:12px;color:var(--muted)">10/01/2026</td>
+                <td style="font-size:12px;color:var(--orange);font-weight:700">17/06/2026 ⚠️</td>
+                <td><span class="badge badge-yellow">Sắp hết hạn</span></td>
+                <td><button class="btn btn-red btn-sm">Xoay ngay</button></td>
+              </tr>
+              <tr>
+                <td style="font-family:monospace;font-size:11.5px;color:var(--muted)">key-003-bk</td>
+                <td><strong>BIDV AI Encryption</strong><br><span style="font-size:11px;color:var(--muted)">AI Credit BNK · Database PII</span></td>
+                <td><span class="tag">AES-256-GCM</span></td>
+                <td><span class="badge badge-purple">At-rest</span></td>
+                <td style="font-size:12px;color:var(--muted)">15/04/2026</td>
+                <td style="font-size:12px;color:var(--muted)">14/07/2026</td>
+                <td><span class="badge badge-green">Hoạt động</span></td>
+                <td><button class="btn btn-outline btn-sm">Xoay vòng</button></td>
+              </tr>
+              <tr>
+                <td style="font-family:monospace;font-size:11.5px;color:var(--muted)">key-004-log</td>
+                <td><strong>Log Signing Key</strong><br><span style="font-size:11px;color:var(--muted)">M2 Logging · Anti-tamper</span></td>
+                <td><span class="tag">Ed25519</span></td>
+                <td><span class="badge badge-gray">Signing</span></td>
+                <td style="font-size:12px;color:var(--muted)">01/01/2026</td>
+                <td style="font-size:12px;color:var(--muted)">01/04/2027</td>
+                <td><span class="badge badge-green">Hoạt động</span></td>
+                <td><button class="btn btn-outline btn-sm">Chi tiết</button></td>
+              </tr>
+              <tr>
+                <td style="font-family:monospace;font-size:11.5px;color:var(--muted)">key-005-hp</td>
+                <td><strong>Hospital PII Key</strong><br><span style="font-size:11px;color:var(--muted)">Chatbot Health · Bv Bạch Mai</span></td>
+                <td><span class="tag">AES-256-GCM</span></td>
+                <td><span class="badge badge-red">Restricted</span></td>
+                <td style="font-size:12px;color:var(--muted)">20/05/2026</td>
+                <td style="font-size:12px;color:var(--muted)">19/08/2026</td>
+                <td><span class="badge badge-green">Hoạt động</span></td>
+                <td><button class="btn btn-outline btn-sm">Xoay vòng</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Phân loại dữ liệu theo nhạy cảm</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🔴 Restricted (DLCN nhạy cảm)</span><strong>8 nguồn</strong></div><div class="prog-bar"><div class="prog-fill" style="width:32%;background:var(--red)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🟠 Confidential (DLCN thông thường)</span><strong>11 nguồn</strong></div><div class="prog-bar"><div class="prog-fill" style="width:44%;background:var(--orange)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🔵 Internal (Dữ liệu nội bộ)</span><strong>19 nguồn</strong></div><div class="prog-bar"><div class="prog-fill" style="width:76%;background:var(--blue)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>⚪ Public (Công khai)</span><strong>6 nguồn</strong></div><div class="prog-bar"><div class="prog-fill" style="width:24%;background:#94A3B8"></div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚙️ Cấu hình Anonymization Pipeline</div></div>
+          <div class="form-row"><div class="form-label">Kỹ thuật mặc định</div><div class="form-value"><span class="tag">Pseudonymization</span><span class="tag">Generalization</span></div></div>
+          <div class="form-row"><div class="form-label">k-Anonymity threshold</div><div class="form-value"><strong>k = 5</strong> (chuẩn NĐ 356)</div></div>
+          <div class="form-row"><div class="form-label">Differential Privacy ε</div><div class="form-value"><strong>ε = 0.1</strong> (mức cao)</div></div>
+          <div class="form-row"><div class="form-label">PII auto-detection</div><div><span class="badge badge-green">Đang bật</span></div></div>
+          <div class="form-row"><div class="form-label">Audit trail key access</div><div><span class="badge badge-green">Đang bật</span></div></div>
+          <div style="margin-top:12px"><button class="btn btn-primary btn-sm">Chạy pipeline ngay</button> <button class="btn btn-outline btn-sm">Xem báo cáo</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ MODULE 2 ════════════ -->
+    <div id="page-m2" class="page">
+      <div class="page-title">📋 Module 2 · Nhật ký Tập trung & Anti-tamper</div>
+      <div class="page-sub">4 nhóm log · Lưu trữ 12 tháng · SHA-256 Hash chain · Ed25519 Digital Signature · WORM Storage</div>
+
+      <div class="alert alert-red"><span class="alert-icon">🚨</span><div><strong>3 cảnh báo bảo mật chưa xử lý</strong> — bao gồm 1 Prompt Injection attempt mức nghiêm trọng. Cần xem xét trong 4 giờ để đảm bảo báo cáo 72h.</div></div>
+
+      <div class="stats-row stats-4">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,75,255,0.1)">📝</div>
+          <div><div class="stat-val">284K</div><div class="stat-label">Log entries hôm nay</div><div class="stat-sub">Tổng 18.4M (12 tháng)</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(29,191,115,0.1)">✅</div>
+          <div><div class="stat-val">100%</div><div class="stat-label">Hash chain integrity</div><div class="stat-sub up">Không phát hiện sửa đổi</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">🤖</div>
+          <div><div class="stat-val">1,847</div><div class="stat-label">AI inference log (hôm nay)</div><div class="stat-sub">Trên 5 model đang chạy</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(229,62,62,0.1)">🚨</div>
+          <div><div class="stat-val" style="color:var(--red)">3</div><div class="stat-label">Security alerts chưa xử lý</div><div class="stat-sub down">SLA còn 3.5 giờ</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🚨 Log Cảnh báo Bảo mật <span class="badge badge-red" style="margin-left:4px">3 chưa xử lý</span></div>
+            <div class="card-action">Xem toàn bộ →</div>
+          </div>
+          <table>
+            <thead><tr><th>Thời gian</th><th>Loại</th><th>Dự án</th><th>Mức độ</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="font-size:11.5px;color:var(--muted)">09:41:22 SA</td>
+                <td><strong>Prompt Injection</strong></td>
+                <td style="font-size:12px">Chatbot VCB</td>
+                <td><span class="badge badge-red">Nghiêm trọng</span></td>
+                <td><button class="btn btn-red btn-sm">Xử lý</button></td>
+              </tr>
+              <tr>
+                <td style="font-size:11.5px;color:var(--muted)">08:15:07 SA</td>
+                <td><strong>Brute Force</strong></td>
+                <td style="font-size:12px">Admin Portal</td>
+                <td><span class="badge badge-yellow">Trung bình</span></td>
+                <td><button class="btn btn-outline btn-sm">Xem</button></td>
+              </tr>
+              <tr>
+                <td style="font-size:11.5px;color:var(--muted)">07:02:45 SA</td>
+                <td><strong>Model Drift</strong></td>
+                <td style="font-size:12px">AI Credit BIDV</td>
+                <td><span class="badge badge-yellow">Trung bình</span></td>
+                <td><button class="btn btn-outline btn-sm">Xem</button></td>
+              </tr>
+              <tr>
+                <td style="font-size:11.5px;color:var(--muted)">T2, 07:30</td>
+                <td><strong>Privilege Escalation</strong></td>
+                <td style="font-size:12px">KMS Gov</td>
+                <td><span class="badge badge-green">Đã xử lý</span></td>
+                <td><button class="btn btn-outline btn-sm">Xem</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🤖 Log Hoạt động AI (hôm nay)</div></div>
+          <table>
+            <thead><tr><th>Thời gian</th><th>Model</th><th>Input hash</th><th>Confidence</th><th>Kết quả</th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="font-size:11px;color:var(--muted)">10:38 SA</td>
+                <td style="font-size:12px">credit-v2.3</td>
+                <td style="font-family:monospace;font-size:10px;color:var(--muted)">a3f7c9...</td>
+                <td><span style="color:#1DBF73;font-weight:700">94.2%</span></td>
+                <td><span class="badge badge-green">Phê duyệt</span></td>
+              </tr>
+              <tr>
+                <td style="font-size:11px;color:var(--muted)">10:35 SA</td>
+                <td style="font-size:12px">credit-v2.3</td>
+                <td style="font-family:monospace;font-size:10px;color:var(--muted)">b8e21d...</td>
+                <td><span style="color:var(--orange);font-weight:700">61.3%</span></td>
+                <td><span class="badge badge-yellow">Chờ người duyệt</span></td>
+              </tr>
+              <tr>
+                <td style="font-size:11px;color:var(--muted)">10:31 SA</td>
+                <td style="font-size:12px">chatbot-kms-v1</td>
+                <td style="font-family:monospace;font-size:10px;color:var(--muted)">f1a40b...</td>
+                <td><span style="color:#1DBF73;font-weight:700">98.7%</span></td>
+                <td><span class="badge badge-green">Trả lời tự động</span></td>
+              </tr>
+              <tr>
+                <td style="font-size:11px;color:var(--muted)">10:28 SA</td>
+                <td style="font-size:12px">health-triage-v1</td>
+                <td style="font-family:monospace;font-size:10px;color:var(--muted)">c90f3e...</td>
+                <td><span style="color:var(--red);font-weight:700">43.1%</span></td>
+                <td><span class="badge badge-red">Human override</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔗 Trạng thái Anti-tamper (Hash Chain)</div></div>
+          <div class="alert alert-green" style="margin-bottom:12px"><span class="alert-icon">✅</span><div>Toàn bộ 18,412,847 log entries đều valid. Hash chain liên tục, không phát hiện sửa đổi.</div></div>
+          <div class="form-row"><div class="form-label">Hash cuối cùng (Block #18412847)</div><div style="font-family:monospace;font-size:11px;color:var(--muted)">SHA-256: 7f3a9c2b4e1d8f6a...</div></div>
+          <div class="form-row"><div class="form-label">Chữ ký số batch gần nhất</div><div><span class="badge badge-green">Đã ký 10:00 SA</span><span style="font-size:11px;color:var(--muted);margin-left:8px">Ed25519</span></div></div>
+          <div class="form-row"><div class="form-label">Storage type</div><div><span class="tag">WORM S3 Object Lock</span></div></div>
+          <div class="form-row"><div class="form-label">Lưu trữ còn lại</div><div><strong style="color:#1DBF73">6.4 tháng</strong> / 12 tháng</div></div>
+          <div style="margin-top:12px"><button class="btn btn-outline btn-sm">Xuất Hash Audit Report</button></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">👤 Log Can thiệp Con người (Human Intervention)</div></div>
+          <table>
+            <thead><tr><th>Thời gian</th><th>Người duyệt</th><th>AI Case</th><th>Quyết định</th></tr></thead>
+            <tbody>
+              <tr><td style="font-size:11px;color:var(--muted)">10:28 SA</td><td style="font-size:12px">Dr. Nguyễn T.A</td><td style="font-size:12px">health-triage #4821</td><td><span class="badge badge-red">Từ chối AI</span></td></tr>
+              <tr><td style="font-size:11px;color:var(--muted)">09:54 SA</td><td style="font-size:12px">Trần Minh Đức</td><td style="font-size:12px">credit #10293</td><td><span class="badge badge-green">Phê duyệt</span></td></tr>
+              <tr><td style="font-size:11px;color:var(--muted)">09:12 SA</td><td style="font-size:12px">Lê Hồng Nhung</td><td style="font-size:12px">credit #10287</td><td><span class="badge badge-yellow">Escalate</span></td></tr>
+              <tr><td style="font-size:11px;color:var(--muted)">08:45 SA</td><td style="font-size:12px">Phạm Việt Anh</td><td style="font-size:12px">chatbot #9981</td><td><span class="badge badge-red">Kill-switch</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ MODULE 3 ════════════ -->
+    <div id="page-m3" class="page">
+      <div class="page-title">🏷️ Module 3 · Gắn nhãn AI & Watermarking</div>
+      <div class="page-sub">C2PA Standard · XMP Metadata · Deepfake warning modal · Non-dismissable label · Điều 17 NĐ 142</div>
+
+      <div class="stats-row stats-4">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(29,191,115,0.1)">🏷️</div>
+          <div><div class="stat-val">3,421</div><div class="stat-label">Nội dung đã gắn nhãn (hôm nay)</div><div class="stat-sub up">↑ 12% vs hôm qua</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(229,62,62,0.1)">⚠️</div>
+          <div><div class="stat-val" style="color:var(--red)">47</div><div class="stat-label">Chờ gắn nhãn thủ công</div><div class="stat-sub down">Deepfake · Cần kiểm duyệt</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">🔧</div>
+          <div><div class="stat-val">94%</div><div class="stat-label">Tỷ lệ tự động hóa nhãn</div><div class="stat-sub">6% cần người duyệt</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,75,255,0.1)">📄</div>
+          <div><div class="stat-val">8</div><div class="stat-label">Nguồn AI đã cấu hình nhãn</div><div class="stat-sub">5 text · 2 image · 1 audio</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🗂️ Hàng chờ gắn nhãn <span class="badge badge-red" style="margin-left:4px">47 chờ</span></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Xử lý hàng loạt</button></div>
+          </div>
+          <table>
+            <thead><tr><th>Nội dung</th><th>Loại</th><th>Nguồn AI</th><th>Rủi ro</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Video phỏng vấn lãnh đạo</strong><br><span style="font-size:11px;color:var(--muted)">deepfake_gen_001.mp4 · 2.3MB</span></td>
+                <td><span class="tag">Video</span></td>
+                <td style="font-size:12px">DeepGen v2</td>
+                <td><span class="badge badge-red">Cao – Deepfake</span></td>
+                <td><button class="btn btn-red btn-sm">Gắn nhãn</button></td>
+              </tr>
+              <tr>
+                <td><strong>Hình ảnh sản phẩm MIDJ</strong><br><span style="font-size:11px;color:var(--muted)">product_render_048.png · 1.1MB</span></td>
+                <td><span class="tag">Image</span></td>
+                <td style="font-size:12px">Midjourney v6</td>
+                <td><span class="badge badge-yellow">Trung bình</span></td>
+                <td><button class="btn btn-outline btn-sm">Gắn nhãn</button></td>
+              </tr>
+              <tr>
+                <td><strong>Báo cáo tài chính AI</strong><br><span style="font-size:11px;color:var(--muted)">report_q2_ai.docx · 340KB</span></td>
+                <td><span class="tag">Text</span></td>
+                <td style="font-size:12px">GPT-4o Internal</td>
+                <td><span class="badge badge-blue">Thấp</span></td>
+                <td><button class="btn btn-outline btn-sm">Auto-label</button></td>
+              </tr>
+              <tr>
+                <td><strong>Voice clone thông báo</strong><br><span style="font-size:11px;color:var(--muted)">announcement_vc.mp3 · 890KB</span></td>
+                <td><span class="tag">Audio</span></td>
+                <td style="font-size:12px">VoiceGen v3</td>
+                <td><span class="badge badge-red">Cao – Voice</span></td>
+                <td><button class="btn btn-red btn-sm">Gắn nhãn</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚙️ Cấu hình nhãn theo nguồn AI</div></div>
+          <table>
+            <thead><tr><th>Nguồn AI</th><th>Label hiện thị</th><th>Watermark</th><th>Deepfake modal</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Internal LLM v2</strong></td>
+                <td><span class="badge badge-green">Bật</span></td>
+                <td><span class="tag">C2PA + XMP</span></td>
+                <td><span class="badge badge-gray">N/A text</span></td>
+              </tr>
+              <tr>
+                <td><strong>Image GenAI v1</strong></td>
+                <td><span class="badge badge-green">Bật</span></td>
+                <td><span class="tag">DCT Steg</span></td>
+                <td><span class="badge badge-yellow">Modal</span></td>
+              </tr>
+              <tr>
+                <td><strong>DeepGen Video v2</strong></td>
+                <td><span class="badge badge-green">Bật</span></td>
+                <td><span class="tag">LSB + C2PA</span></td>
+                <td><span class="badge badge-red">Fullscreen</span></td>
+              </tr>
+              <tr>
+                <td><strong>VoiceGen v3</strong></td>
+                <td><span class="badge badge-green">Bật</span></td>
+                <td><span class="tag">Audio Freq</span></td>
+                <td><span class="badge badge-red">Banner liên tục</span></td>
+              </tr>
+              <tr>
+                <td><strong>ChatBot KMS</strong></td>
+                <td><span class="badge badge-green">Bật</span></td>
+                <td><span class="tag">Unicode VS</span></td>
+                <td><span class="badge badge-gray">N/A</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><div class="card-title">🖥️ Preview giao diện nhãn AI (Component Demo)</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+            <div style="background:#1A1A2E;padding:12px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:14px">🤖</span>
+              <span style="font-size:12px;font-weight:600;color:#fff">Nội dung do AI tạo ra</span>
+            </div>
+            <div style="padding:12px;background:#F8FAFC;font-size:12px;color:var(--muted)">Text label cơ bản cho chatbot và GenAI text output</div>
+            <div style="padding:8px 12px;background:#F1EDFF;font-size:10.5px;color:var(--primary);font-weight:600">Loại rủi ro: Thấp · Badge dạng dark bar</div>
+          </div>
+          <div style="border:1px solid rgba(245,158,11,0.3);border-radius:8px;overflow:hidden">
+            <div style="background:rgba(246,173,85,0.1);padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(245,158,11,0.2)">
+              <span style="font-size:16px">⚠️</span>
+              <div><div style="font-size:12.5px;font-weight:700;color:#92600A">Hình ảnh do AI tạo ra</div><div style="font-size:11px;color:#B07820">Nguồn: FOXAI Image Gen v1</div></div>
+            </div>
+            <div style="padding:12px;background:#FFFBF0;font-size:12px;color:var(--muted)">Image overlay label — hiển thị góc phải trên ảnh</div>
+            <div style="padding:8px 12px;background:rgba(246,173,85,0.08);font-size:10.5px;color:#92600A;font-weight:600">Loại rủi ro: Trung bình · Overlay không dismissable</div>
+          </div>
+          <div style="border:2px solid rgba(229,62,62,0.3);border-radius:8px;overflow:hidden">
+            <div style="background:rgba(229,62,62,0.08);padding:14px;text-align:center;border-bottom:1px solid rgba(229,62,62,0.2)">
+              <div style="font-size:24px;margin-bottom:6px">⚠️</div>
+              <div style="font-size:13px;font-weight:800;color:var(--red)">CẢNH BÁO DEEPFAKE</div>
+              <div style="font-size:11.5px;color:#C53030;margin-top:4px">Nội dung video/âm thanh này được tạo<br>bởi AI tổng hợp. Không phải người thật.</div>
+            </div>
+            <div style="padding:10px;display:flex;gap:8px;background:#FFF5F5">
+              <button style="flex:1;padding:7px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Tôi đã hiểu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ MODULE 4 ════════════ -->
+    <div id="page-m4" class="page">
+      <div class="page-title">🔑 Module 4 · MFA & Phân quyền (IAM)</div>
+      <div class="page-sub">FIDO2/WebAuthn · RBAC 7 vai trò · Zero Trust · Kill-switch · Human-in-the-Loop · Điều 29 NĐ 142</div>
+
+      <div class="stats-row stats-4">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(255,140,0,0.1)">👥</div>
+          <div><div class="stat-val">25</div><div class="stat-label">Tổng tài khoản</div><div class="stat-sub">18 đang hoạt động</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(29,191,115,0.1)">📲</div>
+          <div><div class="stat-val">87%</div><div class="stat-label">Tỷ lệ bật MFA</div><div class="stat-sub down">3 tài khoản chưa bật</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(229,62,62,0.1)">🛑</div>
+          <div><div class="stat-val" style="color:var(--red)">1</div><div class="stat-label">Kill-switch kích hoạt (30 ngày)</div><div class="stat-sub">AI Health · 08:45 SA hôm nay</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">⏳</div>
+          <div><div class="stat-val">12</div><div class="stat-label">Cases chờ Human review</div><div class="stat-sub">SLA trung bình: 14 phút</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👥 Quản lý Người dùng</div>
+            <button class="btn btn-primary btn-sm">+ Thêm người dùng</button>
+          </div>
+          <table>
+            <thead><tr><th>Người dùng</th><th>Vai trò</th><th>MFA</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Nguyễn Hoàng Long</strong><br><span style="font-size:11px;color:var(--muted)">hoanglong208@gmail.com</span></td>
+                <td><span class="badge badge-purple">Super Admin</span></td>
+                <td><span class="badge badge-green">FIDO2</span></td>
+                <td><span class="badge badge-green">Online</span></td>
+                <td><button class="btn btn-outline btn-sm">Sửa</button></td>
+              </tr>
+              <tr>
+                <td><strong>Trần Minh Đức</strong><br><span style="font-size:11px;color:var(--muted)">minhduc@foxai.vn</span></td>
+                <td><span class="badge badge-blue">AI Operator</span></td>
+                <td><span class="badge badge-green">TOTP</span></td>
+                <td><span class="badge badge-green">Online</span></td>
+                <td><button class="btn btn-outline btn-sm">Sửa</button></td>
+              </tr>
+              <tr>
+                <td><strong>Lê Hồng Nhung</strong><br><span style="font-size:11px;color:var(--muted)">hongnhung@foxai.vn</span></td>
+                <td><span class="badge badge-gray">Data Steward</span></td>
+                <td><span class="badge badge-green">TOTP</span></td>
+                <td><span class="badge badge-gray">Offline</span></td>
+                <td><button class="btn btn-outline btn-sm">Sửa</button></td>
+              </tr>
+              <tr>
+                <td><strong>Phạm Việt Anh</strong><br><span style="font-size:11px;color:var(--muted)">vietanh@foxai.vn</span></td>
+                <td><span class="badge badge-red" style="background:rgba(229,62,62,0.1);color:var(--red)">Kill-switch</span></td>
+                <td><span class="badge badge-green">FIDO2</span></td>
+                <td><span class="badge badge-green">Online</span></td>
+                <td><button class="btn btn-outline btn-sm">Sửa</button></td>
+              </tr>
+              <tr>
+                <td><strong>Nguyễn admin_ext_03</strong><br><span style="font-size:11px;color:var(--muted)">admin_ext_03@client.vn</span></td>
+                <td><span class="badge badge-gray">Auditor</span></td>
+                <td><span class="badge badge-yellow">Chưa bật ⚠️</span></td>
+                <td><span class="badge badge-gray">Offline</span></td>
+                <td><button class="btn btn-red btn-sm">Bắt buộc MFA</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="kill-switch">
+            <div class="ks-header">
+              <div class="ks-title">🛑 Kill-switch – Dừng khẩn cấp AI</div>
+              <div class="ks-toggle" id="ks1" onclick="toggleKS('ks1')"></div>
+            </div>
+            <div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Dừng toàn bộ quyết định tự động của module AI. Chỉ nhân sự được phân quyền <strong style="color:var(--text)">Kill-switch User</strong> mới kích hoạt được.</div>
+            <table style="font-size:12px">
+              <thead><tr><th>Module AI</th><th>Trạng thái</th><th>Người kích hoạt</th></tr></thead>
+              <tbody>
+                <tr><td>AI Credit BIDV</td><td><span class="badge badge-green">Đang chạy</span></td><td style="color:var(--muted)">—</td></tr>
+                <tr><td>AI Health Triage</td><td><span class="badge badge-red">DỪNG 08:45</span></td><td style="color:var(--muted)">Phạm V. Anh</td></tr>
+                <tr><td>Chatbot KMS Gov</td><td><span class="badge badge-green">Đang chạy</span></td><td style="color:var(--muted)">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">⏳ Human-in-the-Loop Queue</div><div class="card-action">Xem hết →</div></div>
+            <div class="log-row">
+              <div class="log-dot" style="background:var(--red)"></div>
+              <div class="log-time">10:35 SA</div>
+              <div><strong>credit #10302</strong> — Confidence 61.3% · Model: credit-v2.3<br><span style="font-size:11.5px;color:var(--muted)">Assigned: Trần Minh Đức · SLA 30 phút</span></div>
+            </div>
+            <div class="log-row">
+              <div class="log-dot" style="background:var(--orange)"></div>
+              <div class="log-time">10:22 SA</div>
+              <div><strong>health #4831</strong> — Confidence 55.8% · Cần bác sĩ xét<br><span style="font-size:11.5px;color:var(--muted)">Assigned: Dr. Nguyễn T.A · SLA 15 phút</span></div>
+            </div>
+            <div class="log-row">
+              <div class="log-dot" style="background:var(--yellow)"></div>
+              <div class="log-time">09:58 SA</div>
+              <div><strong>credit #10298</strong> — Confidence 68.2% · Borderline<br><span style="font-size:11.5px;color:var(--muted)">Assigned: Lê Hồng Nhung · SLA 25 phút</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><div class="card-title">🗺️ Ma trận Phân quyền RBAC (7 vai trò chuẩn)</div></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Vai trò</th>
+                <th>Xem dữ liệu PII</th>
+                <th>Quản lý khóa</th>
+                <th>Xem log</th>
+                <th>Xuất log</th>
+                <th>Gắn nhãn AI</th>
+                <th>Kill-switch</th>
+                <th>Phê duyệt AI</th>
+                <th>Quản trị user</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#F8F5FF">
+                <td><span class="badge badge-purple">Super Admin</span></td>
+                <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+              </tr>
+              <tr><td><span class="badge badge-blue">System Admin</span></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td></tr>
+              <tr><td><span class="badge badge-gray">Data Steward</span></td><td>✅</td><td>⚠️ Read</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+              <tr><td><span class="badge badge-blue">AI Operator</span></td><td>❌</td><td>❌</td><td>⚠️ AI only</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+              <tr><td><span class="badge badge-gray">Auditor</span></td><td>⚠️ Masked</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+              <tr><td><span class="badge badge-gray">End User</span></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+              <tr style="background:#FFF5F5"><td><span class="badge badge-red" style="background:rgba(229,62,62,0.1);color:var(--red)">Kill-switch</span></td><td>❌</td><td>❌</td><td>⚠️ Security</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ MODULE 5 ════════════ -->
+    <div id="page-m5" class="page">
+      <div class="page-title">📦 Module 5 · Bộ hồ sơ Tuân thủ (Compliance Kit)</div>
+      <div class="page-sub">DPIA Mẫu số 10 · System Card · Model Card · Auto-DFD · Evidence Bundle · Điều 11, 12 NĐ 142</div>
+
+      <div class="stats-row stats-3">
+        <div class="stat-card">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div class="score-circle"><div class="score-inner">78%</div></div>
+            <div>
+              <div class="stat-val" style="color:var(--green)">78%</div>
+              <div class="stat-label">Compliance Score tổng thể</div>
+              <div class="stat-sub">7/9 dự án đầy đủ hồ sơ</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(0,194,168,0.1)">📄</div>
+          <div>
+            <div class="stat-val">7</div>
+            <div class="stat-label">DPIA đã hoàn thành</div>
+            <div class="stat-sub down">2 dự án chưa có</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(43,127,255,0.1)">🃏</div>
+          <div>
+            <div class="stat-val">12</div>
+            <div class="stat-label">System + Model Cards đã tạo</div>
+            <div class="stat-sub up">Cập nhật tự động</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow"><span class="alert-icon">⚠️</span><div><strong>2 dự án cần hành động ngay:</strong> CDP Retail (Winmart) — chưa có DPIA, deadline đã qua. IOC Hanoi — DPIA đang soạn, deadline 20/06/2026 (còn 10 ngày).</div></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📄 Trạng thái DPIA theo dự án</div>
+            <button class="btn btn-primary btn-sm">+ Tạo DPIA mới</button>
+          </div>
+          <table>
+            <thead><tr><th>Dự án</th><th>Loại DLCN</th><th>Trạng thái</th><th>Deadline</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>KMS Gov v2</strong><br><span style="font-size:11px;color:var(--muted)">UBND TP.HCM</span></td>
+                <td style="font-size:11.5px"><span class="tag">CCCD</span><span class="tag">Địa chỉ</span></td>
+                <td><span class="badge badge-green">✅ Đã nộp BCA</span></td>
+                <td style="font-size:12px;color:var(--muted)">15/05 ✓</td>
+                <td><button class="btn btn-outline btn-sm">Xuất PDF</button></td>
+              </tr>
+              <tr>
+                <td><strong>AI Credit BIDV</strong><br><span style="font-size:11px;color:var(--muted)">BIDV</span></td>
+                <td style="font-size:11.5px"><span class="tag">Tài chính</span><span class="tag">CCCD</span></td>
+                <td><span class="badge badge-green">✅ Được phê duyệt</span></td>
+                <td style="font-size:12px;color:var(--muted)">30/04 ✓</td>
+                <td><button class="btn btn-outline btn-sm">Xuất PDF</button></td>
+              </tr>
+              <tr>
+                <td><strong>IOC Hanoi</strong><br><span style="font-size:11px;color:var(--muted)">Sở TT&TT HN</span></td>
+                <td style="font-size:11.5px"><span class="tag">Camera</span><span class="tag">Vị trí</span></td>
+                <td><span class="badge badge-yellow">⏳ Đang soạn</span></td>
+                <td style="font-size:12px;color:var(--orange);font-weight:700">20/06 ⚠️</td>
+                <td><button class="btn btn-primary btn-sm">Tiếp tục</button></td>
+              </tr>
+              <tr>
+                <td><strong>CDP Retail</strong><br><span style="font-size:11px;color:var(--muted)">Winmart</span></td>
+                <td style="font-size:11.5px"><span class="tag">Mua sắm</span><span class="tag">Điện thoại</span></td>
+                <td><span class="badge badge-red">❌ Chưa có</span></td>
+                <td style="font-size:12px;color:var(--red);font-weight:700">Quá hạn!</td>
+                <td><button class="btn btn-red btn-sm">Tạo ngay</button></td>
+              </tr>
+              <tr>
+                <td><strong>Chatbot Health</strong><br><span style="font-size:11px;color:var(--muted)">Bv Bạch Mai</span></td>
+                <td style="font-size:11.5px"><span class="tag">Y tế</span><span class="tag">Bệnh án</span></td>
+                <td><span class="badge badge-blue">🔍 Đang review</span></td>
+                <td style="font-size:12px;color:var(--muted)">28/06</td>
+                <td><button class="btn btn-outline btn-sm">Xem</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-header"><div class="card-title">🃏 System Card & Model Card</div></div>
+            <table>
+              <thead><tr><th>Tên Card</th><th>Phiên bản</th><th>Cập nhật</th><th></th></tr></thead>
+              <tbody>
+                <tr><td><strong>SC · KMS Gov v2</strong></td><td style="font-size:11px">v1.2</td><td style="font-size:11px;color:var(--muted)">05/06/2026</td><td><button class="btn btn-outline btn-sm">Xuất</button></td></tr>
+                <tr><td><strong>MC · credit-model-v2.3</strong></td><td style="font-size:11px">v2.3</td><td style="font-size:11px;color:var(--muted)">01/06/2026</td><td><button class="btn btn-outline btn-sm">Xuất</button></td></tr>
+                <tr><td><strong>SC · AI Credit BIDV</strong></td><td style="font-size:11px">v1.0</td><td style="font-size:11px;color:var(--muted)">28/04/2026</td><td><button class="btn btn-outline btn-sm">Xuất</button></td></tr>
+                <tr><td><strong>MC · health-triage-v1</strong></td><td style="font-size:11px">v1.1</td><td style="font-size:11px;color:var(--muted)">20/05/2026</td><td><button class="btn btn-outline btn-sm">Xuất</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">📦 Xuất Evidence Bundle</div></div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Đóng gói tự động toàn bộ minh chứng kỹ thuật M1–M4 theo dự án để nộp thanh tra Bộ Công an (A05).</div>
+            <div style="margin-bottom:10px">
+              <div style="font-size:12px;font-weight:600;margin-bottom:6px">Chọn dự án:</div>
+              <select style="width:100%">
+                <option>KMS Gov v2 – UBND TP.HCM</option>
+                <option>AI Credit – BIDV</option>
+                <option>Chatbot Health – Bv Bạch Mai</option>
+              </select>
+            </div>
+            <div style="margin-bottom:12px;padding:12px;background:var(--bg);border-radius:8px;font-size:12.5px">
+              <div style="font-weight:700;margin-bottom:7px">Sẽ bao gồm:</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px">
+                <span class="tag">✅ Key rotation log</span>
+                <span class="tag">✅ Hash chain report</span>
+                <span class="tag">✅ MFA config screenshot</span>
+                <span class="tag">✅ AI label samples</span>
+                <span class="tag">✅ Kill-switch test record</span>
+                <span class="tag">✅ DPIA PDF</span>
+                <span class="tag">✅ System Card</span>
+                <span class="tag">✅ DFD diagram</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%">⬇️ Xuất Evidence Bundle (.pdf)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const pages={dashboard:'Dashboard',m1:'M1 · Mã hóa & Khóa',m2:'M2 · Nhật ký AI',m3:'M3 · Gắn nhãn AI',m4:'M4 · MFA & Phân quyền',m5:'M5 · Compliance Kit'};
+function nav(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('crumb-cur').textContent=pages[id]||id;
+}
+function toggleKS(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('on');
+}
+</script>
+</body>
+</html>
